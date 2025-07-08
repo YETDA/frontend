@@ -1,6 +1,7 @@
 import "./globals.css";
 import Header from "@/components/Header";
 import SubHeader from "@/components/SubHeader";
+import Footer from "@/components/Footer";
 
 export default function RootLayout({
   children,
@@ -10,10 +11,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <main className="h-[200vh]">
+        <main>
           <Header />
           <SubHeader />
           {children}
+          <Footer />
         </main>
       </body>
     </html>

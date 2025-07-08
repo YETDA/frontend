@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@import "tailwindcss";
-
 /* ───────── Color Variables ───────── */
 :root {
   --primary: #1f9eff;
