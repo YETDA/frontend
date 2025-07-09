@@ -1,8 +1,3 @@
-import "./globals.css";
-import Header from "@/components/Header";
-import SubHeader from "@/components/SubHeader";
-import Footer from "@/components/Footer";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -11,12 +6,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <main>
-          <Header />
-          <SubHeader />
-          {children}
-          <Footer />
-        </main>
+        <main>{children}</main>
       </body>
     </html>
   );
