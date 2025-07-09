@@ -1,0 +1,26 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+interface Tab {
+  value: string;
+  content: React.ReactNode;
+}
+
+export function TabBar({ tabs }: { tabs: Tab[] }) {
+  return (
+    <Tabs defaultValue="account" className="w-full pt-[40px] pb-[40px]">
+      <TabsList>
+        {tabs.map(({ value }) => (
+          <TabsTrigger key={value} value={value}>
+            {value}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+
+      {tabs.map(({ value, content }) => (
+        <TabsContent key={value} value={value}>
+          {content}
+        </TabsContent>
+      ))}
+    </Tabs>
+  );
+}
