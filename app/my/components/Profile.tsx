@@ -27,26 +27,26 @@ export function Profile() {
         </div>
 
         <div className="grid grid-rows-2 gap-y-0">
-          <h3 className="text-lg font-bold font-semibold mt-1">{user.name}</h3>
+          <h3 className="text-lg font-bold mt-1">{user.name}</h3>
 
           <div className="grid grid-cols-4 gap-10 text-center">
             <div className="grid grid-rows-2">
-              <p className="text-gray-400 text-sm">팔로잉</p>
+              <p className="text-[#868e96] text-sm">팔로잉</p>
               <p className="font-bold">{user.following}</p>
             </div>
 
             <div className="grid grid-rows-2">
-              <p className="text-gray-400 text-sm">팔로워</p>{" "}
+              <p className="text-[#868e96] text-sm">팔로워</p>{" "}
               <p className="font-bold">{user.followers}</p>
             </div>
 
             <div className="grid grid-rows-2">
-              <p className="text-gray-400 text-sm">구매수</p>{" "}
+              <p className="text-[#868e96] text-sm">구매수</p>{" "}
               <p className="font-bold">{user.purchaseProjects}</p>
             </div>
 
             <div className="grid grid-rows-2">
-              <p className="text-gray-400 text-sm">후원수</p>{" "}
+              <p className="text-[#868e96] text-sm">후원수</p>{" "}
               <p className="font-bold">{user.donation}</p>
             </div>
           </div>
