@@ -24,7 +24,6 @@
 body {
   font-family: "Pretendard", "sans-serif";
   background: var(--white);
-  padding: 0 320px;
 }
 
 *:focus {
@@ -53,6 +52,15 @@ body {
 .text-md-navItem {
   font-size: 16px;
   font-weight: bold;
+}
+.text-badge {
+  font-size: 8px;
+  font-weight: bold;
+}
+.text-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--secondary);
 }
 
 /* ───────── Color Style ───────── */

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function SubHeader() {
   return (
-    <div className="flex justify-between items-center p-4 border-b border-gray-200 sticky top-0 z-10">
+    <div className="flex justify-between items-center bg-white p-4 border-b border-gray-200 sticky top-0 z-10">
       {/* 헤더 카테고리 */}
       <div className="flex text-md-navItem gap-5">
         <Link href="/">앱/서비스</Link>

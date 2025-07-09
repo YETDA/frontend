@@ -11,6 +11,11 @@ const config: Config = {
         black: "#000000",
         white: "#ffffff",
       },
+      screens: {
+        xl: "1280px",
+        xxl: "1440px",
+        xxxl: "1920px",
+      },
     },
   },
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
