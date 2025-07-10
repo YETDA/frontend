@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
-import { Mail } from "lucide-react";
+import { Github, Mail } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
