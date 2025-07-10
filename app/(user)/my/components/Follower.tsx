@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { Plus, Check } from "lucide-react";
 
 interface Follower {
   id: string;
@@ -41,14 +42,14 @@ export function Follower({
                 variant="outline"
                 className="bg-[#1f9eff] text-white w-[129px] h-[40px] hover:bg-[#0064ff]"
               >
-                v 팔로잉
+                <Check /> 팔로잉
               </Button>
             ) : (
               <Button
                 variant="outline"
                 className="text-[#1f8ce6] w-[129px] h-[40px] hover:bg-[#0064ff] hover:text-white"
               >
-                + 팔로우
+                <Plus /> 팔로우
               </Button>
             )}
           </div>
