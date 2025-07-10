@@ -14,7 +14,7 @@ const user = {
 
 export function Profile() {
   return (
-    <div className="flex flex-row items-center justify-between p-4">
+    <div className="flex flex-row items-center justify-between pt-[20px] pd-[20px]">
       <div className="flex flex-row items-center gap-8">
         <div className="items-center justify-center">
           <Image
