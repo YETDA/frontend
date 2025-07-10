@@ -5,9 +5,15 @@ interface Tab {
   content: React.ReactNode;
 }
 
-export function TabBar({ tabs }: { tabs: Tab[] }) {
+export function TabBar({
+  tabs,
+  defaultValue = "소개글",
+}: {
+  tabs: Tab[];
+  defaultValue: string;
+}) {
   return (
-    <Tabs defaultValue="account" className="w-full pt-[40px] pb-[40px]">
+    <Tabs defaultValue={defaultValue} className="w-full pt-[40px] pb-[40px]">
       <TabsList>
         {tabs.map(({ value }) => (
           <TabsTrigger key={value} value={value}>
