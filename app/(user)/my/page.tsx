@@ -54,7 +54,7 @@ const tabs: Tab[] = [
   {
     value: "후원한 예따",
     content: (
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-4 justify-items-center">
         <ProjectCard />
         <ProjectCard />
         <ProjectCard />
@@ -65,7 +65,7 @@ const tabs: Tab[] = [
   {
     value: "구매한 예따",
     content: (
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-4 justify-items-center">
         <ProjectCard />
         <ProjectCard />
         <ProjectCard />
@@ -76,7 +76,7 @@ const tabs: Tab[] = [
   {
     value: "등록한 프로젝트",
     content: (
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-4 justify-items-center">
         <ProjectCard />
         <ProjectCard />
         <ProjectCard />
