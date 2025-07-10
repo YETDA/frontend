@@ -1,3 +1,4 @@
+import ProjectCard from "../components/ProjectCard";
 import { Follower } from "./components/Follower";
 import { Introduce } from "./components/Introduce";
 import { Profile } from "./components/Profile";
@@ -52,15 +53,36 @@ const tabs: Tab[] = [
   },
   {
     value: "후원한 예따",
-    content: <div>Privacy Settings</div>,
+    content: (
+      <div className="grid grid-cols-4">
+        <ProjectCard />
+        <ProjectCard />
+        <ProjectCard />
+        <ProjectCard />
+      </div>
+    ),
   },
   {
     value: "구매한 예따",
-    content: <div>Privacy Settings</div>,
+    content: (
+      <div className="grid grid-cols-4">
+        <ProjectCard />
+        <ProjectCard />
+        <ProjectCard />
+        <ProjectCard />
+      </div>
+    ),
   },
   {
     value: "등록한 프로젝트",
-    content: <div>Privacy Settings</div>,
+    content: (
+      <div className="grid grid-cols-4">
+        <ProjectCard />
+        <ProjectCard />
+        <ProjectCard />
+        <ProjectCard />
+      </div>
+    ),
   },
 ];
 
