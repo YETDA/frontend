@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { Bell, Heart } from "lucide-react";
 import Link from "next/link";
 
 export default function Header() {
