@@ -7,6 +7,9 @@ export default function LoginPage() {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/kakao`;
   };
 
+  const handleGithubLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/github`;
+  };
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center gap-10">
       {/* 로고 부분 */}
@@ -29,12 +32,15 @@ export default function LoginPage() {
             alt="카카오 로그인"
           />
         </div>
-        <Image
-          src="/images/github-login.png"
-          width={300}
-          height={50}
-          alt="깃허브 로그인"
-        />
+
+        <div onClick={handleGithubLogin}>
+          <Image
+            src="/images/github-login.png"
+            width={300}
+            height={50}
+            alt="깃허브 로그인"
+          />
+        </div>
       </div>
     </div>
   );
