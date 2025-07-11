@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Bell, Heart } from "lucide-react";
 
 export default function Header() {
   return (
