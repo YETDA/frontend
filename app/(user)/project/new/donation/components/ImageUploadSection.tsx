@@ -7,7 +7,7 @@ import Image from "next/image";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 
-import type { DonationFormData } from "../../../../../types/donationFormData";
+import type { DonationFormData } from "../../../../../../types/donationFormData";
 
 interface Props {
   formData: DonationFormData;

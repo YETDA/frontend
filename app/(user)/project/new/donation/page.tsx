@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
-import type { DonationFormData } from "../../../../types/donationFormData";
+import type { DonationFormData } from "../../../../../types/donationFormData";
 
 import DescriptionSection from "./components/DescriptionSection";
 import ProductFormSection from "./components/DonationFormSection";

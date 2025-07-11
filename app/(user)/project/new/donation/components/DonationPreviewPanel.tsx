@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-import type { DonationFormData } from "../../../../../types/donationFormData";
+import type { DonationFormData } from "../../../../../../types/donationFormData";
 
 const categoryLabels: Record<string, string> = {
   app: "앱/서비스",
