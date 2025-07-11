@@ -19,7 +19,10 @@ const user = {
   donation: 10,
 };
 
-export function Profile() {
+interface ProfileProps {
+  onEditClick: (isEditing: boolean) => void;
+}
+export function Profile({ onEditClick }: ProfileProps) {
   return (
     <div className="flex flex-row items-center justify-between pt-[20px] pd-[20px]">
       <div className="flex flex-row items-center gap-8">
@@ -82,6 +85,9 @@ export function Profile() {
         <Button
           variant="outline"
           className="hover:bg-[#0064ff] bg-[#1f9eff] text-white"
+          onClick={() => {
+            onEditClick(true);
+          }}
         >
           내 정보 수정
         </Button>
