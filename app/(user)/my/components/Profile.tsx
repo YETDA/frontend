@@ -1,11 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Github, Mail } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/MyTooltip";
 
 const user = {
   name: "서현우",
