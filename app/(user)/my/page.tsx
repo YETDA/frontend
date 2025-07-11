@@ -1,8 +1,12 @@
+"use client";
+
+import React, { useState } from "react";
 import ProjectCard from "../components/ProjectCard";
 import { Follower } from "./components/Follower";
 import { Introduce } from "./components/Introduce";
 import { Profile } from "./components/Profile";
 import { TabBar } from "./components/TabBar";
+import { ProfileEditForm } from "./components/ProfileEditForm";
 
 interface Tab {
   value: string;
@@ -86,11 +90,31 @@ const tabs: Tab[] = [
   },
 ];
 
+const user = {
+  name: "서현우",
+  email: "seohyun@example.com",
+  github: "https://github.com/seohyun",
+  introduce: "안녕하세요, 서현우입니다. 개발자입니다.",
+  image: "/images/sample-image.jpg",
+  followers: 120,
+  following: 80,
+  purchaseProjects: 5,
+  donation: 10,
+};
+
 export default function MyPage() {
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
     <main>
-      <Profile />
-      <TabBar defaultValue="소개글" tabs={tabs} />
+      {isEditing ? (
+        <ProfileEditForm user={user} onProfileClick={setIsEditing} />
+      ) : (
+        <>
+          <Profile onEditClick={setIsEditing} />
+          <TabBar defaultValue="소개글" tabs={tabs} />
+        </>
+      )}
     </main>
   );
 }
