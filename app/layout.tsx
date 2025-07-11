@@ -1,6 +1,3 @@
-import "./globals.css";
-// import Header from "@/components/Header";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -9,10 +6,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <main>
-          {/* <Header /> */}
-          {children}
-        </main>
+        <main>{children}</main>
       </body>
     </html>
   );

@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@import "tailwindcss";
-
 /* ───────── Color Variables ───────── */
 :root {
   --primary: #1f9eff;
@@ -26,14 +24,13 @@
 body {
   font-family: "Pretendard", "sans-serif";
   background: var(--white);
-  padding: 0 320px;
 }
 
 *:focus {
   outline: none;
 }
 
-/* ───────── Global Style ───────── */
+/* ───────── Font Style ───────── */
 .text-xs {
   font-size: 12px;
 }
@@ -51,4 +48,34 @@ body {
 }
 .text-2xl {
   font-size: 32px;
+}
+.text-md-navItem {
+  font-size: 16px;
+  font-weight: bold;
+}
+.text-badge {
+  font-size: 8px;
+  font-weight: bold;
+}
+.text-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--secondary);
+}
+
+/* ───────── Color Style ───────── */
+.bg-gray {
+  background-color: var(--gray);
+}
+.bg-darkgray {
+  background-color: var(--darkgray);
+}
+.bg-primary {
+  background-color: var(--primary);
+}
+.bg-secondary {
+  background-color: var(--secondary);
+}
+.bg-white {
+  background-color: var(--white);
 }
