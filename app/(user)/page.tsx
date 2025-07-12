@@ -1,7 +1,23 @@
+"use client";
+
 import HomeCarousel from "./components/HomeCarousel";
 import ProjectCard from "./components/ProjectCard";
+import React, { useState } from "react";
+import { popularProjectApi } from "@/app/api/popular-project/api";
 
 export default function Home() {
+  const [projects, setProjects] = useState([]);
+
+  const handleLoadPopular = async () => {
+    try {
+      const data = await popularProjectApi();
+      console.log("받아온 인기 프로젝트:", data);
+      setProjects(data);
+    } catch (err) {
+      console.error("인기 프로젝트 조회 실패:", err);
+    }
+  };
+
   return (
     <main>
       <HomeCarousel />
@@ -18,6 +34,7 @@ export default function Home() {
         <ProjectCard />
         <ProjectCard />
       </div>
+      <button onClick={handleLoadPopular}>인기 프로젝트</button>
     </main>
   );
 }
