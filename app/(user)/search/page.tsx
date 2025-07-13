@@ -1,9 +1,8 @@
-// app/search/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { searchResultApi } from "@/app/api/search/api"; // 경로는 실제 위치에 맞춰 조정
+import { searchResultApi } from "@/app/api/search/api";
 import ProjectCard from "../components/ProjectCard";
 
 export default function SearchPage() {
@@ -16,7 +15,6 @@ export default function SearchPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // 키워드가 2글자 미만이면 호출하지 않음
     if (keyword.length < 2) {
       setProjects([]);
       setTotalCount(0);
@@ -29,8 +27,6 @@ export default function SearchPage() {
       setError(null);
       try {
         const res = await searchResultApi(keyword);
-        console.log("search API 응답:", res);
-        // API 리턴 형태가 { timestamp, statusCode, message, data: { content, totalElements, … } }
         const wrapper = res;
         const body = wrapper.data;
         setProjects(body.content || []);
@@ -48,7 +44,6 @@ export default function SearchPage() {
 
   return (
     <div className="w-full h-fit flex flex-col items-center justify-center">
-      {/* 검색어 길이에 따라 안내 문구 */}
       {keyword.length < 2 ? (
         <p className="mt-4 text-gray-500">
           검색어를 최소 2글자 이상 입력해주세요.
