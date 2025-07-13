@@ -18,6 +18,7 @@ export default function Home() {
 
     try {
       const data = await popularProjectApi(page, 20);
+      console.log("Popular projects:", data);
       setProjects(prev => [...prev, ...data.content]);
       setPage(prev => prev + 1);
       setHasMore(!data.last);

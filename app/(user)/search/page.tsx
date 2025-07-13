@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { searchResultApi } from "@/app/api/search/api";
 import ProjectCard from "../components/ProjectCard";
+import { toCardData, CardData } from "@/utils/adapter";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword") ?? "";
 
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<CardData[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,24 +23,26 @@ export default function SearchPage() {
       return;
     }
 
-    const fetch = async () => {
+    const fetchData = async () => {
       setLoading(true);
       setError(null);
+
       try {
         const res = await searchResultApi(keyword);
-        const wrapper = res;
-        const body = wrapper.data;
-        setProjects(body.content || []);
-        setTotalCount(body.totalElements || body.content.length);
+        const rawList = res.data.content || [];
+        const normalized: CardData[] = rawList.map(toCardData);
+
+        setProjects(normalized);
+        setTotalCount(res.data.totalElements ?? normalized.length);
       } catch (e: any) {
-        console.error(e);
+        console.error("검색 실패:", e);
         setError(e.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetch();
+    fetchData();
   }, [keyword]);
 
   return (
@@ -58,9 +61,15 @@ export default function SearchPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-4 gap-10">
-        {projects.map(proj => (
-          <ProjectCard key={proj.id} project={proj} />
+      <div className="grid grid-cols-4 gap-10 px-4">
+        {projects.map(p => (
+          <ProjectCard
+            key={p.id}
+            hostName={p.hostName}
+            thumbnail={p.thumbnail}
+            title={p.title}
+            sellingAmount={p.sellingAmount}
+          />
         ))}
       </div>
     </div>
