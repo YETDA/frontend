@@ -6,7 +6,14 @@ import Link from "next/link";
 export default function Header() {
   return (
     <div className="w-full flex justify-between items-center p-4">
-      <Image src="/images/sample-logo.png" width={24} height={24} alt="logo" />
+      <Link href="/">
+        <Image
+          src="/images/sample-logo.png"
+          width={24}
+          height={24}
+          alt="logo"
+        />
+      </Link>
       {/* <div className="text-xs cursor-pointer">
         <div className="flex justify-center items-center gap-4">
           <Bell width={20} height={20} />
