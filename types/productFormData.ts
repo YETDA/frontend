@@ -1,7 +1,6 @@
-export interface ProductOption {
-  name: string;
-  price: string;
-  description: string;
+export interface ProductImage {
+  file: File;
+  previewUrl: string;
 }
 
 export interface ProductFormData {
@@ -10,8 +9,13 @@ export interface ProductFormData {
   description: string;
   category: string;
   price: string;
-  images: string[];
-  options: ProductOption[];
+  images: ProductImage[];
+  options: {
+    name: string;
+    price: string;
+    description: string;
+    file?: File;
+  }[];
   creatorName: string;
   creatorBio: string;
   creatorAvatar: string;

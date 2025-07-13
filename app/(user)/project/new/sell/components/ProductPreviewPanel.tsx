@@ -26,15 +26,18 @@ interface Props {
 export default function ProductPreviewPanel({ formData }: Props) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mainImage, setMainImage] = useState<string | null>(null);
+
   const basePrice = Number(formData.price || 0);
   const selectedOption = formData.options[selectedIndex];
   const optionPrice = Number(selectedOption?.price || 0);
   const totalPrice = basePrice + optionPrice;
 
+  const getImageUrl = (index: number) =>
+    formData.images[index]?.previewUrl ?? null;
+
   return (
     <div className="bg-white rounded-lg border p-6 sticky top-24 h-fit">
       <div className="text-center mb-6">
-        {/* <div className="text-sky-500 font-bold text-lg mb-4">예따</div> */}
         <h2 className="text-sky-500 font-bold text-lg mb-4">Preview</h2>
       </div>
 
@@ -69,9 +72,9 @@ export default function ProductPreviewPanel({ formData }: Props) {
         </div>
 
         <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden relative">
-          {mainImage || formData.images[0] ? (
+          {mainImage || getImageUrl(0) ? (
             <Image
-              src={mainImage || formData.images[0]!}
+              src={mainImage || getImageUrl(0)!}
               alt="대표 이미지"
               className="w-full h-full object-cover"
               fill
@@ -85,23 +88,20 @@ export default function ProductPreviewPanel({ formData }: Props) {
         </div>
 
         <div className="flex space-x-2">
-          {[formData.images[0], ...formData.images.slice(1)].map((src, i) => {
-            if (!src) return null;
-            return (
-              <div
-                key={i}
-                className="w-16 h-16 bg-gray-100 rounded border overflow-hidden relative cursor-pointer"
-                onClick={() => setMainImage(src)}
-              >
-                <Image
-                  src={src}
-                  alt={`썸네일 이미지 ${i + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            );
-          })}
+          {formData.images.map((img, i) => (
+            <div
+              key={i}
+              className="w-16 h-16 bg-gray-100 rounded border overflow-hidden relative cursor-pointer"
+              onClick={() => setMainImage(img.previewUrl)}
+            >
+              <Image
+                src={img.previewUrl}
+                alt={`썸네일 이미지 ${i + 1}`}
+                fill
+                className="object-cover"
+              />
+            </div>
+          ))}
         </div>
 
         <Card>
@@ -111,6 +111,7 @@ export default function ProductPreviewPanel({ formData }: Props) {
             </div>
           </CardContent>
         </Card>
+
         <div className="pt-4">
           {formData.options.length > 0 && (
             <>
