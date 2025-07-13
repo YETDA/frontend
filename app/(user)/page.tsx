@@ -4,6 +4,8 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import HomeCarousel from "./components/HomeCarousel";
 import ProjectCard from "./components/ProjectCard";
 import { popularProjectApi } from "@/app/api/popular-project/api";
+import { DetailApi } from "@/app/api/project/DetailApi";
+import Link from "next/link";
 
 export default function Home() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -56,13 +58,14 @@ export default function Home() {
 
       <div className="grid grid-cols-4 gap-10 px-4">
         {projects.map(project => (
-          <ProjectCard
-            key={project.id}
-            hostName={project.hostName}
-            thumbnail={project.thumbnail}
-            title={project.title}
-            sellingAmount={project.sellingAmount}
-          />
+          <Link key={project.id} href={`/project/sell/${project.id}`}>
+            <ProjectCard
+              hostName={project.hostName}
+              thumbnail={project.thumbnail}
+              title={project.title}
+              sellingAmount={project.sellingAmount}
+            />
+          </Link>
         ))}
       </div>
 
