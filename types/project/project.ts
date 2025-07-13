@@ -1,31 +1,50 @@
-import type { Creator } from "./creator";
-import type { DonationData } from "./donationData";
-import type { FAQ } from "./faq";
-import type { ProductOption } from "./productOption";
-import type { Review } from "./review";
-import type { Update } from "./update";
+// types/project/project.ts
 
-type ProjectType = "sell" | "donation";
+export interface ProductOption {
+  title: string;
+  content: string;
+  price: number;
+  fileUrl: string | null;
+  optionStatus: string;
+  providingMethod: string;
+  purchaseOptionId: number;
+}
+
+export interface Creator {
+  userId: number;
+  name: string;
+  userProfileImage: string;
+  userIntroduce: string;
+  email: string;
+  followerCount: number;
+}
+
+export interface ProjectStats {
+  likes: number;
+  shares: number;
+  views: number;
+}
 
 export interface Project {
-  id: string;
-  type: ProjectType;
+  projectId: number;
   title: string;
-  subtitle: string;
-  description: string;
-  category: string;
-  // subCategories: string[];
-  images: string[];
-  creator: Creator;
-  price?: number;
-  options?: ProductOption[]; // 이것도 판매만
-  donation?: DonationData; // 이건 후원만
-  updates: Update[];
-  reviews: Review[];
-  faqs: FAQ[];
-  stats: {
-    likes: number;
-    shares: number;
-    views: number;
-  };
+  introduce: string;
+  content: string;
+  purchaseCategoryId: number;
+  purchaseCategoryName: string;
+  averageDeliveryTime: string;
+  contentImageUrls: string[];
+
+  purchaseOptions: ProductOption[];
+
+  userId: number;
+  name: string;
+  userProfileImage: string;
+  userIntroduce: string;
+  email: string;
+
+  projectCount: number;
+  followerCount: number;
+
+  stats?: ProjectStats;
 }

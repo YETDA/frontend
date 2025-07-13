@@ -49,34 +49,42 @@ export default function SellProjectPage() {
           purchaseCategoryId: 1,
           getAverageDeliveryTime: "즉시 다운로드 및 24시간 이내 이메일 발송",
           purchaseOptionList: formData.options.map(option => ({
-            providingMethod: option.name === "STANDARD" ? "DOWNLOAD" : "EMAIL",
+            providingMethod: "DOWNLOAD",
             title: option.name,
             content: option.description,
             price: Number(option.price),
             optionStatus: "AVAILABLE",
-            ...(option.name === "STANDARD" && {
-              fileIdentifier: "기본템플릿.pdf",
-            }),
+            fileIdentifier: option.file?.name ?? "",
+            originalFileName: option.file?.name ?? "",
+            fileType: option.file?.type ?? "application/octet-stream",
+            fileSize: option.file?.size ?? 0,
+            fileUrl: "string",
           })),
         },
       };
 
       form.append("requestDto", JSON.stringify(requestDto));
-      if (formData.images[0]) {
-        form.append("contentImage", formData.images[0].file);
-      }
 
-      const downloadOption = formData.options.find(o => o.name === "STANDARD");
-      if (downloadOption?.file) {
-        form.append("optionFiles", downloadOption.file, "기본템플릿.pdf");
-      }
+      formData.images.forEach(image => {
+        if (image?.file) {
+          form.append("contentImage", image.file, image.file.name);
+        }
+      });
+
+      formData.options.forEach(opt => {
+        if (opt.file) {
+          form.append("optionFiles", opt.file, opt.file.name);
+        }
+      });
 
       const res = await createPurchaseProject(form);
       const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result?.message || "업로드 실패");
+      }
+
       const projectId = result?.data?.projectId;
-
-      if (!projectId) throw new Error("프로젝트 ID가 반환되지 않았습니다.");
-
       alert("등록 완료");
       router.push(`/project/sell/${projectId}`);
     } catch (err) {

@@ -3,7 +3,7 @@ import type { Project } from "@/types/project/project";
 const API_URL = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/+$/, "");
 
 const accessToken =
-  "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLquYDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQxNjEzNCwiZXhwIjoxNzUyNDE3OTM0fQ.fpVTISftw1OI4pwGSMDI55KOBgCqdI6D5tYuRH3KY4s";
+  "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLquYDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQyMjQ0MCwiZXhwIjoxNzUyNDMzMjQwfQ.haE8OD6yTGl4eD1lFi5Bs8NSD-kiKRGOav8IIiUeG2Y";
 
 export async function createPurchaseProject(formData: FormData) {
   const res = await fetch(`${API_URL}/api/v1/project/purchase`, {
