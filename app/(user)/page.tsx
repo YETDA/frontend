@@ -4,8 +4,6 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import HomeCarousel from "./components/HomeCarousel";
 import ProjectCard from "./components/ProjectCard";
 import { popularProjectApi } from "@/app/api/popular-project/api";
-import { DetailApi } from "@/app/api/project/DetailApi";
-import Link from "next/link";
 
 export default function Home() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -57,24 +55,19 @@ export default function Home() {
       <div className="w-full text-lg font-bold p-4">인기 프로젝트</div>
 
       <div className="grid grid-cols-4 gap-10 px-4">
-        {projects.map(project => (
-          <Link key={project.id} href={`/project/sell/${project.id}`}>
-            <ProjectCard
-              hostName={project.hostName}
-              thumbnail={project.thumbnail}
-              title={project.title}
-              sellingAmount={project.sellingAmount}
-            />
-          </Link>
+        {projects.map((project, idx) => (
+          <ProjectCard
+            key={`${project.id}-${idx}`}
+            hostName={project.hostName}
+            thumbnail={project.thumbnail ?? "/images/sample-image.jpg"}
+            title={project.title}
+            sellingAmount={project.sellingAmount}
+          />
         ))}
       </div>
 
       <div ref={loaderRef} className="py-10 text-center">
-        {isLoading
-          ? "로딩 중…"
-          : hasMore
-            ? "더 불러오는 중…"
-            : "마지막 프로젝트입니다."}
+        {isLoading ? "로딩 중…" : hasMore ? "더 불러오는 중…" : <div></div>}
       </div>
     </main>
   );
