@@ -56,8 +56,9 @@ export default function SearchPage() {
       ) : error ? (
         <p className="mt-4 text-red-500">에러 발생: {error}</p>
       ) : (
-        <div className="w-full flex justify-start items-center mb-4">
-          {totalCount}개의 검색결과가 있습니다.
+        <div className="w-full flex justify-start items-center px-4 pt-4 pb-10">
+          <div className="text-[#0064FF]">{totalCount}</div>개의 검색결과가
+          있습니다.
         </div>
       )}
 
