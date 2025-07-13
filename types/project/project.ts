@@ -1,5 +1,3 @@
-// types/project/project.ts
-
 export interface ProductOption {
   title: string;
   content: string;

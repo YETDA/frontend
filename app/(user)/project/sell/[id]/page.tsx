@@ -14,7 +14,8 @@ interface Props {
 }
 
 export default async function ProjectDetailPage({ params }: Props) {
-  const project: Project | null = await getSellProjectById(params.id);
+  const id = String(params.id);
+  const project: Project | null = await getSellProjectById(id);
 
   if (!project) {
     return notFound();

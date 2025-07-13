@@ -143,7 +143,7 @@ export default function ProductPreviewPanel({ formData }: Props) {
             </>
           )}
 
-          <Button className="w-full bg-sky-500 hover:bg-sky-600" size="lg">
+          <Button className="w-full bg-sky-500" size="lg">
             <ShoppingCart className="w-4 h-4 mr-2" />
             구매하기
           </Button>

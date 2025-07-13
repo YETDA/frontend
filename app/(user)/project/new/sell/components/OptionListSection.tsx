@@ -1,5 +1,7 @@
 "use client";
 
+import type { ChangeEvent } from "react";
+
 import { Plus, X } from "lucide-react";
 
 import type { ProductFormData } from "@/types/productFormData";
@@ -8,7 +10,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
 const MAX_OPTIONS = 3;
+
 interface Props {
   formData: ProductFormData;
   onUpdate: <K extends keyof ProductFormData>(
@@ -39,6 +43,13 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
   ) => {
     const updated = formData.options.map((opt, i) =>
       i === index ? { ...opt, [field]: value } : opt,
+    );
+    onUpdate("options", updated);
+  };
+
+  const handleFileChange = (index: number, file: File) => {
+    const updated = formData.options.map((opt, i) =>
+      i === index ? { ...opt, file } : opt,
     );
     onUpdate("options", updated);
   };
@@ -116,6 +127,25 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
                 }
                 placeholder="예: 기본 옵션 설명"
               />
+            </div>
+
+            <div>
+              <Label className="mb-1 block">첨부 파일 (선택)</Label>
+              <div className="flex items-center space-x-2">
+                <Input
+                  type="file"
+                  accept="application/pdf,image/*"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleFileChange(index, file);
+                  }}
+                />
+                {option.file && (
+                  <span className="text-sm text-gray-600">
+                    {option.file.name}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         ))}
