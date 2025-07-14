@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 export interface FollowCount {
@@ -20,18 +21,16 @@ export function useFollowCount() {
   useEffect(() => {
     const fetchFollow = async () => {
       try {
-        const res = await fetch(
+        const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/follow/count`,
           {
-            method: "GET",
             headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLquYDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ4NjEyNywiZXhwIjoxNzUyNDk2OTI3fQ.h3OWtqbunjSOAHQ7b-kWsrMjmHOkw2b8QLHmsm85Kps`,
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLqsJDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ5NTY5NywiZXhwIjoxNzUyNTA2NDk3fQ.0VL3n2CVJgna0eXp2ZAtRV5Xxc5vGYqq_xbEYJj1XOA`,
             },
           },
         );
 
-        const data = await res.json();
-        setFollowCountData(data);
+        setFollowCountData(res.data);
       } catch (err) {
         console.error("로그인 필요 또는 인증 실패:", err);
       }

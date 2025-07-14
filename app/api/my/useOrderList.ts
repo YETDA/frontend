@@ -1,23 +1,21 @@
 import { useEffect, useState } from "react";
 import { Order } from "@/types/user/orderList";
+import axios from "axios";
 export function useOrderList() {
   const [OrderData, setOrderData] = useState<Order[] | null>(null);
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const res = await fetch(
+        const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/order`,
           {
-            method: "GET",
             headers: {
               Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLqsJDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ5NTY5NywiZXhwIjoxNzUyNTA2NDk3fQ.0VL3n2CVJgna0eXp2ZAtRV5Xxc5vGYqq_xbEYJj1XOA`,
             },
           },
         );
-
-        const data = await res.json();
-        setOrderData(data.data.content);
+        setOrderData(res.data.data.content);
       } catch (err) {
         console.error("로그인 필요 또는 인증 실패:", err);
       }

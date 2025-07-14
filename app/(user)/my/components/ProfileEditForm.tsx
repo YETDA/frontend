@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/MyTextarea";
+import axios from "axios";
 
 interface ProfileFormProps {
   name: string;
@@ -55,7 +56,7 @@ export function ProfileEditForm({
         formData.append("image", imageFile);
       }
 
-      const response = await fetch(
+      const response = await axios.put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/mypage`,
         {
           method: "PUT",
@@ -66,11 +67,11 @@ export function ProfileEditForm({
         },
       );
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error("프로필 수정 실패");
       }
 
-      const result = await response.json();
+      const result = await response;
       onSubmitSuccess();
       onProfileClick(false);
     } catch (error) {
