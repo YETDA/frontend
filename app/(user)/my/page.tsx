@@ -9,10 +9,17 @@ import { TabBar } from "./components/TabBar";
 import { ProfileEditForm } from "./components/ProfileEditForm";
 import { useFollow } from "@/app/api/my/useFollow";
 import { useFollowing } from "@/app/api/my/useFollowing";
+import { usePurchase } from "@/app/api/my/usePurchase";
+import MyProjectCard from "./components/ui/MyProjectCard";
+import { PurchaseProject } from "@/types/user/purchaseProject";
 
 interface Tab {
   value: string;
   content: React.ReactNode;
+}
+
+interface PurchaseProjectResponse {
+  data: PurchaseProject;
 }
 
 export default function MyPage() {
@@ -20,6 +27,7 @@ export default function MyPage() {
   const [isEditing, setIsEditing] = useState(false);
   const following = useFollowing();
   const followers = useFollow();
+  const purchaseProjects: PurchaseProject | null = usePurchase();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -64,35 +72,52 @@ export default function MyPage() {
         },
         {
           value: "후원한 예따",
+          // 후원한 프로젝트 api는 아직 없으므로 구매한 프로젝트 api를 활용하여 나타냈습니다.
           content: (
             <div className="grid grid-cols-4 justify-items-center">
-              <ProjectCard />
-              <ProjectCard />
-              <ProjectCard />
-              <ProjectCard />
+              {purchaseProjects?.content?.map((project, index) => (
+                <MyProjectCard
+                  key={`${project.id}-${index}`}
+                  project={{
+                    id: project.id,
+                    title: project.title,
+                    purchaseOptions: project.purchaseOptions,
+                    contentImageUrls:
+                      project.contentImageUrls?.[0] ||
+                      "/images/sample-image.jpg",
+                    hostName: project.hostName,
+                  }}
+                />
+              ))}
             </div>
           ),
         },
+
         {
           value: "구매한 예따",
           content: (
             <div className="grid grid-cols-4 justify-items-center">
-              <ProjectCard />
-              <ProjectCard />
-              <ProjectCard />
-              <ProjectCard />
+              {purchaseProjects?.content?.map((project, index) => (
+                <MyProjectCard
+                  key={`${project.id}-${index}`}
+                  project={{
+                    id: project.id,
+                    title: project.title,
+                    purchaseOptions: project.purchaseOptions,
+                    contentImageUrls:
+                      project.contentImageUrls?.[0] ||
+                      "/images/sample-image.jpg",
+                    hostName: project.hostName,
+                  }}
+                />
+              ))}
             </div>
           ),
         },
         {
           value: "등록한 프로젝트",
           content: (
-            <div className="grid grid-cols-4 justify-items-center">
-              <ProjectCard />
-              <ProjectCard />
-              <ProjectCard />
-              <ProjectCard />
-            </div>
+            <div className="grid grid-cols-4 justify-items-center"></div>
           ),
         },
       ]
