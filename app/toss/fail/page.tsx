@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { ReactElement } from "react";
 import { useSearchParams } from "next/navigation";
 import "../App.css";
 
-export default function FailPage(): JSX.Element {
+export default function FailPage(): ReactElement {
   const searchParams = useSearchParams();
   const message = searchParams.get("message") ?? "";
   const code = searchParams.get("code") ?? "";

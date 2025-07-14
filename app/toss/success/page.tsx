@@ -135,7 +135,7 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ReactElement } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import "../App.css";
 
@@ -143,7 +143,7 @@ import { TossPurchaseApi } from "@/app/api/test/TestApi";
 
 type ConfirmResponse = Record<string, any>;
 
-export default function SuccessPage(): JSX.Element {
+export default function SuccessPage(): ReactElement {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [responseData, setResponseData] = useState<ConfirmResponse | null>(
