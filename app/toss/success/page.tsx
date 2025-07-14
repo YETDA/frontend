@@ -135,11 +135,12 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+
 import "../App.css";
 
-import { TossPurchaseApi } from "@/app/api/test/TestApi";
+import { TossPurchaseApi } from "@/app/api/project";
 
 type ConfirmResponse = Record<string, any>;
 
