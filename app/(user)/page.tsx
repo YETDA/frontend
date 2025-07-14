@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import HomeCarousel from "./components/HomeCarousel";
 import ProjectCard from "./components/ProjectCard";
 import { popularProjectApi } from "@/app/api/popular-project/api";
+import Link from "next/link";
 
 export default function Home() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -18,6 +19,7 @@ export default function Home() {
 
     try {
       const data = await popularProjectApi(page, 20);
+      console.log("Popular projects:", data);
       setProjects(prev => [...prev, ...data.content]);
       setPage(prev => prev + 1);
       setHasMore(!data.last);
@@ -56,13 +58,15 @@ export default function Home() {
 
       <div className="grid grid-cols-4 gap-10 px-4">
         {projects.map((project, idx) => (
-          <ProjectCard
-            key={`${project.id}-${idx}`}
-            hostName={project.hostName}
-            thumbnail={project.thumbnail ?? "/images/sample-image.jpg"}
-            title={project.title}
-            sellingAmount={project.sellingAmount}
-          />
+          <Link href={`/project/sell/${project.id}`} key={project.id}>
+            <ProjectCard
+              key={`${project.id}-${idx}`}
+              hostName={project.hostName}
+              thumbnail={project.thumbnail ?? "/images/sample-image.jpg"}
+              title={project.title}
+              sellingAmount={project.sellingAmount}
+            />
+          </Link>
         ))}
       </div>
 
