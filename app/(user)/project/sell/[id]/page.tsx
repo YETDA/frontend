@@ -9,10 +9,11 @@ import ProjectSidebar from "./components/ProjectSidebar";
 export default async function ProjectDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
-  const project = await getSellProjectById(id);
+  const { id } = await params;
+  const project: Project | null = await getSellProjectById(id);
+
   if (!project) {
     return notFound();
   }
