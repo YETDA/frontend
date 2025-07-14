@@ -7,6 +7,8 @@ import { Introduce } from "./components/Introduce";
 import { Profile } from "./components/Profile";
 import { TabBar } from "./components/TabBar";
 import { ProfileEditForm } from "./components/ProfileEditForm";
+import { useFollow } from "@/app/api/my/useFollow";
+import { useFollowing } from "@/app/api/my/useFollowing";
 
 interface Tab {
   value: string;
@@ -52,6 +54,8 @@ type FollowData = {
 export default function MyPage() {
   const [userData, setUserData] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const following = useFollowing();
+  const followers = useFollow();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -61,7 +65,7 @@ export default function MyPage() {
           {
             method: "GET",
             headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLquYDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ1Mzk5NiwiZXhwIjoxNzUyNDY0Nzk2fQ.I3c44CfZvJdnKF5SpVfGJuBEGyUb6E7g1QI_wG9f3W0`,
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLquYDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ4NjEyNywiZXhwIjoxNzUyNDk2OTI3fQ.h3OWtqbunjSOAHQ7b-kWsrMjmHOkw2b8QLHmsm85Kps`,
             },
           },
         );
@@ -76,53 +80,59 @@ export default function MyPage() {
     fetchUser();
   }, []);
 
-  const tabs: Tab[] = [
-    {
-      value: "소개글",
-      content: <Introduce introduce={userData.data.introduce} />,
-    },
-    {
-      value: "팔로워",
-      content: <Follower user={followers} following={following} />,
-    },
-    {
-      value: "팔로잉",
-      content: <Follower user={following} following={following} />,
-    },
-    {
-      value: "후원한 예따",
-      content: (
-        <div className="grid grid-cols-4 justify-items-center">
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-        </div>
-      ),
-    },
-    {
-      value: "구매한 예따",
-      content: (
-        <div className="grid grid-cols-4 justify-items-center">
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-        </div>
-      ),
-    },
-    {
-      value: "등록한 프로젝트",
-      content: (
-        <div className="grid grid-cols-4 justify-items-center">
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-        </div>
-      ),
-    },
-  ];
+  const tabs: Tab[] = userData
+    ? [
+        {
+          value: "소개글",
+          content: <Introduce introduce={userData.data.introduce} />,
+        },
+        {
+          value: "팔로워",
+          content: (
+            <Follower user={followers?.data} following={following?.data} />
+          ),
+        },
+        {
+          value: "팔로잉",
+          content: (
+            <Follower user={following?.data} following={following?.data} />
+          ),
+        },
+        {
+          value: "후원한 예따",
+          content: (
+            <div className="grid grid-cols-4 justify-items-center">
+              <ProjectCard />
+              <ProjectCard />
+              <ProjectCard />
+              <ProjectCard />
+            </div>
+          ),
+        },
+        {
+          value: "구매한 예따",
+          content: (
+            <div className="grid grid-cols-4 justify-items-center">
+              <ProjectCard />
+              <ProjectCard />
+              <ProjectCard />
+              <ProjectCard />
+            </div>
+          ),
+        },
+        {
+          value: "등록한 프로젝트",
+          content: (
+            <div className="grid grid-cols-4 justify-items-center">
+              <ProjectCard />
+              <ProjectCard />
+              <ProjectCard />
+              <ProjectCard />
+            </div>
+          ),
+        },
+      ]
+    : [];
 
   return (
     <main>
