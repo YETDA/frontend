@@ -90,20 +90,6 @@ const tabs: Tab[] = [
   },
 ];
 
-const user = {
-  timestamp: "2025-07-13 04:24:32",
-  statusCode: 200,
-  message: "마이페이지 정보 조회 성공",
-  data: {
-    name: "김주영",
-    email: "mywndud23@naver.com",
-    introduce: null,
-    portfolioAddress: null,
-    image:
-      "http://img1.kakaocdn.net/thumb/R640x640.q70/?fname=http://t1.kakaocdn.net/account_images/default_profile.jpeg",
-  },
-};
-
 type FollowData = {
   timestamp: string;
   statusCode: number;
