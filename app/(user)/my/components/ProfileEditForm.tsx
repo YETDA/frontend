@@ -15,9 +15,11 @@ interface ProfileFormProps {
 export function ProfileEditForm({
   user,
   onProfileClick,
+  onSubmitSuccess,
 }: {
   user: ProfileFormProps;
   onProfileClick: (isEditing: boolean) => void;
+  onSubmitSuccess: () => void;
 }) {
   const [value, setValue] = useState(user || "");
   const [previewImage, setPreviewImage] = useState<string>(user.image);
@@ -31,6 +33,51 @@ export function ProfileEditForm({
     setImageFile(file);
   };
 
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+
+      const jsonBlob = new Blob(
+        [
+          JSON.stringify({
+            name: value.name,
+            email: value.email,
+            introduce: value.introduce,
+            portfolioAddress: value.portfolioAddress,
+          }),
+        ],
+        { type: "application/json" },
+      );
+
+      formData.append("info", jsonBlob);
+
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/mypage`,
+        {
+          method: "PUT",
+          body: formData,
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLquYDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ4NjEyNywiZXhwIjoxNzUyNDk2OTI3fQ.h3OWtqbunjSOAHQ7b-kWsrMjmHOkw2b8QLHmsm85Kps`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("프로필 수정 실패");
+      }
+
+      const result = await response.json();
+      onSubmitSuccess();
+      onProfileClick(false);
+    } catch (error) {
+      console.error("에러 발생:", error);
+    }
+  };
+
   return (
     <div className="gap-1">
       <div className="flex flex-row justify-between pt-[20px]">
@@ -38,7 +85,7 @@ export function ProfileEditForm({
           <div className="flex flex-row gap-8">
             <div className="flex flex-col">
               <Image
-                src={user.image || previewImage}
+                src={previewImage || user.image}
                 width={100}
                 height={100}
                 alt="Profile Picture"
@@ -104,7 +151,7 @@ export function ProfileEditForm({
           <Button
             variant="outline"
             className="w-20 hover:bg-[#0064ff] bg-[#1f9eff] text-white"
-            onClick={() => onProfileClick(false)}
+            onClick={handleSubmit}
           >
             확인
           </Button>
