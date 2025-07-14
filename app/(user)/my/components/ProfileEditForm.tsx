@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/MyTextarea";
 
 interface ProfileFormProps {
-  name?: string;
+  name: string;
   email?: string;
-  github?: string;
-  introduce?: string;
+  portfolioAddress: string | null | "";
+  introduce?: string | null;
   image: string;
 }
 
@@ -38,7 +38,7 @@ export function ProfileEditForm({
           <div className="flex flex-row gap-8">
             <div className="flex flex-col">
               <Image
-                src={previewImage}
+                src={user.image || previewImage}
                 width={100}
                 height={100}
                 alt="Profile Picture"
@@ -67,11 +67,13 @@ export function ProfileEditForm({
               </div>
               <div className="flex flex-row items-center justify-center gap-1">
                 <div className="flex flex-row justify-center items-center">
-                  <span className="text-md">GitHub</span>
+                  <span className="text-md">포트폴리오 주소</span>
                 </div>
                 <Input
-                  value={value.github}
-                  onChange={e => setValue({ ...value, github: e.target.value })}
+                  value={value.portfolioAddress ?? ""}
+                  onChange={e =>
+                    setValue({ ...value, portfolioAddress: e.target.value })
+                  }
                   className="ml-2"
                 />
               </div>
@@ -92,9 +94,9 @@ export function ProfileEditForm({
               <span className="text-md">소개글</span>
             </div>
             <Textarea
-              value={value.introduce}
+              value={value.introduce || ""}
               onChange={e => setValue({ ...value, introduce: e.target.value })}
-              placeholder="Type your message here."
+              placeholder="자신을 소개하는 글을 적어보세요."
             />
           </div>
         </div>
