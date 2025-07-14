@@ -10,11 +10,9 @@ export default async function ProjectDetailPage({
   params,
 }: {
   params: { id: string };
-  searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const { id } = params;
-  const project: Project | null = await getSellProjectById(id);
-
+  const project = await getSellProjectById(id);
   if (!project) {
     return notFound();
   }
