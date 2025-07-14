@@ -16,9 +16,9 @@ interface Props {
 
 export default function ProjectDescriptionTabs({
   description,
-  faqs,
-  reviews,
-  updates,
+  faqs = [],
+  reviews = [],
+  updates = [],
 }: Props) {
   return (
     <Tabs defaultValue="description" className="w-full">

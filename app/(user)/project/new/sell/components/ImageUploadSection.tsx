@@ -27,13 +27,15 @@ export default function ImageUploadSection({ formData, onUpdate }: Props) {
     if (!files || files.length === 0) return;
 
     const file = files[0];
-    const imageUrl = URL.createObjectURL(file);
+    const previewUrl = URL.createObjectURL(file);
     const updated = [...formData.images];
 
+    const imageObj = { file, previewUrl };
+
     if (isMain) {
-      updated[0] = imageUrl;
+      updated[0] = imageObj;
     } else if (index !== undefined && index >= 0 && index < 3) {
-      updated[index + 1] = imageUrl;
+      updated[index + 1] = imageObj;
     }
 
     onUpdate("images", updated.slice(0, 4));
@@ -50,7 +52,7 @@ export default function ImageUploadSection({ formData, onUpdate }: Props) {
           <label className="mt-2 block aspect-video border-2 border-dashed border-gray-300 rounded-lg overflow-hidden hover:border-gray-400 transition-colors cursor-pointer relative">
             {formData.images[0] ? (
               <Image
-                src={formData.images[0]}
+                src={formData.images[0].previewUrl}
                 alt="대표 이미지"
                 width={800}
                 height={450}
@@ -75,15 +77,15 @@ export default function ImageUploadSection({ formData, onUpdate }: Props) {
           <Label>추가 이미지</Label>
           <div className="mt-2 grid grid-cols-3 gap-4">
             {[0, 1, 2].map(i => {
-              const imgSrc = formData.images[i + 1];
+              const image = formData.images[i + 1];
               return (
                 <label
                   key={i}
                   className="aspect-square border-2 border-dashed border-gray-300 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:border-gray-400 transition-colors relative"
                 >
-                  {imgSrc ? (
+                  {image ? (
                     <Image
-                      src={imgSrc}
+                      src={image.previewUrl}
                       alt={`추가 이미지 ${i + 1}`}
                       width={300}
                       height={300}

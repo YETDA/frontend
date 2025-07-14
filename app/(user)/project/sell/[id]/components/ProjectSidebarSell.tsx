@@ -14,16 +14,18 @@ interface Props {
 
 export default function ProjectSidebarSell({ project }: Props) {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const selectedOption = project.options?.[selectedIndex];
+  const selectedOption = project.purchaseOptions?.[selectedIndex];
+
+  const totalPrice = selectedOption?.price.toLocaleString() ?? "0";
 
   return (
     <Card className="rounded-2xl shadow-sm border">
       <CardContent className="space-y-6">
-        {project.options && project.options.length > 0 && (
+        {project.purchaseOptions && project.purchaseOptions.length > 0 && (
           <div className="flex justify-between border-b">
-            {project.options.map((opt, idx) => (
+            {project.purchaseOptions.map((opt, idx) => (
               <button
-                key={idx}
+                key={opt.purchaseOptionId}
                 className={`flex-1 text-center py-2 font-medium ${
                   selectedIndex === idx
                     ? "text-black border-b-2 border-black"
@@ -31,26 +33,23 @@ export default function ProjectSidebarSell({ project }: Props) {
                 }`}
                 onClick={() => setSelectedIndex(idx)}
               >
-                {opt.name}
+                {opt.title}
               </button>
             ))}
           </div>
         )}
+
         {selectedOption && (
           <div className="space-y-3 text-gray-800">
-            <div className="text-2xl font-bold">
-              ₩
-              {Number(
-                project.price! + Number(selectedOption.price),
-              ).toLocaleString()}
-            </div>
-            {selectedOption.description && (
+            <div className="text-2xl font-bold">₩{totalPrice}</div>
+            {selectedOption.content && (
               <div className="text-sm leading-relaxed whitespace-pre-line font-medium">
-                {selectedOption.description}
+                {selectedOption.content}
               </div>
             )}
           </div>
         )}
+
         <Button
           className="w-full bg-sky-500 hover:bg-sky-600 text-white"
           size="lg"

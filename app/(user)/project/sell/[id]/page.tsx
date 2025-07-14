@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import type { Project } from "@/types/project/project";
 
-import { getSellProjectById } from "@/app/api/dummySellProject";
+import { getSellProjectById } from "@/app/api/project";
 
 import ProjectDescriptionTabs from "./components/ProjectDescriptionTabs";
 import ProjectHeader from "./components/ProjectHeader";
@@ -14,7 +14,8 @@ interface Props {
 }
 
 export default async function ProjectDetailPage({ params }: Props) {
-  const project: Project | null = await getSellProjectById(params.id);
+  const id = String(params.id);
+  const project: Project | null = await getSellProjectById(id);
 
   if (!project) {
     return notFound();
@@ -26,12 +27,12 @@ export default async function ProjectDetailPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-12">
           <div className="space-y-12">
             <ProjectHeader project={project} />
-            <ProjectImageGallery images={project.images} />
+            <ProjectImageGallery images={project.contentImageUrls} />
             <ProjectDescriptionTabs
-              description={project.description}
-              faqs={project.faqs}
-              reviews={project.reviews}
-              updates={project.updates}
+              description={project.content}
+              faqs={[]}
+              reviews={[]}
+              updates={[]}
             />
           </div>
           <div className="sticky top-24 self-start">
