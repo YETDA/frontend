@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import React, { useEffect, useState, useRef, useCallback } from "react";
+
+import { popularProjectApi } from "@/app/api/popular-project/api";
+
 import HomeCarousel from "./components/HomeCarousel";
 import ProjectCard from "./components/ProjectCard";
-import { popularProjectApi } from "@/app/api/popular-project/api";
-import Link from "next/link";
 
 export default function Home() {
   const [projects, setProjects] = useState<any[]>([]);
