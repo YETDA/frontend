@@ -9,8 +9,8 @@ export default function Header() {
       <Link href="/">
         <Image
           src="/images/sample-logo.png"
-          width={24}
-          height={24}
+          width={30}
+          height={30}
           alt="logo"
         />
       </Link>
