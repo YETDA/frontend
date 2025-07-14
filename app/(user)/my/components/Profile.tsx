@@ -1,8 +1,11 @@
+import { Mail } from "lucide-react";
 import Image from "next/image";
+
+import { useFollowCount } from "@/app/api/my/useFollowCount";
 import { Button } from "@/components/ui/button";
-import { Github, Mail } from "lucide-react";
+
+import { GithubBadge } from "./GithubBadge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/MyTooltip";
-import { useFollowCount } from "@/app/api/my/useFollower";
 
 interface User {
   name: string;
@@ -36,12 +39,9 @@ export function Profile({ user, onEditClick }: ProfileProps) {
 
         <div className="grid grid-rows-2 gap-y-0">
           <div className="flex flex-row items-center gap-1">
-            <h3 className="text-lg font-bold mt-1">{user.name}</h3>
+            <h3 className="text-lg font-bold">{user.name}</h3>
             {user.portfolioAddress ? (
-              <div className="w-18 h-5 bg-secondary rounded-full flex items-center justify-center text-white">
-                <Github className="h-4 w-4" />
-                <span className="text-xs ml-1">portfolio</span>
-              </div>
+              <GithubBadge githubUrl={user.portfolioAddress} />
             ) : null}
           </div>
           <div className="flex flex-row items-center gap-2 pb-2">

@@ -1,9 +1,8 @@
 export interface Creator {
   name: string;
-  avatar: string;
-  bio: string;
-  github?: string;
-  portfolio?: string;
-  projects: number;
-  followers: number;
+  userProfileImage: string;
+  userIntroduce: string;
+  followerCount: number;
+  userId: number;
+  email: string;
 }
