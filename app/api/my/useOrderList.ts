@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Order } from "@/types/user/orderList";
-export function useOoderList() {
+export function useOrderList() {
   const [OrderData, setOrderData] = useState<Order[] | null>(null);
 
   useEffect(() => {

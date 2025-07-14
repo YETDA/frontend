@@ -12,7 +12,7 @@ import { useFollowing } from "@/app/api/my/useFollowing";
 import { usePurchase } from "@/app/api/my/usePurchase";
 import MyProjectCard from "./components/ui/MyProjectCard";
 import { PurchaseProject } from "@/types/user/purchaseProject";
-import { useOoderList } from "@/app/api/my/useOrderList";
+import { useOrderList } from "@/app/api/my/useOrderList";
 import { Order } from "@/types/user/orderList";
 
 interface Tab {
@@ -30,7 +30,7 @@ export default function MyPage() {
   const following = useFollowing();
   const followers = useFollow();
   const purchaseProjects: PurchaseProject | null = usePurchase();
-  const orderList: Order[] | null = useOoderList();
+  const orderList: Order[] | null = useOrderList();
 
   const fetchUser = async () => {
     try {
