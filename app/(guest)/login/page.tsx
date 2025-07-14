@@ -3,8 +3,10 @@
 import Image from "next/image";
 
 export default function LoginPage() {
+  const redirectUri = encodeURIComponent("http://localhost:3000"); // 로그인 후 리다이렉트할 URL
+
   const handleKakaoLogin = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/kakao`;
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/kakao?state=${redirectUri}`;
   };
 
   const handleGithubLogin = () => {
