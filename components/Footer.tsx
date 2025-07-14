@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <div className="w-full h-[186px] flex items-center px-36 py-8 bg-primary text-white">
+    <div className="w-full h-[186px] flex items-center px-36 py-8 bg-primary text-white mt-20">
       <div className="flex justify-between items-start gap-20">
         {/* 푸터 메뉴 */}
         <div className="flex flex-col justify-center items-start gap-7">
