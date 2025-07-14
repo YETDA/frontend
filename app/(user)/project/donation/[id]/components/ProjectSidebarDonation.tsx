@@ -1,26 +1,30 @@
-"use client";
+// "use client";
 
-import { CreditCard, Calendar } from "lucide-react";
-import { useState } from "react";
+// import { CreditCard, Calendar } from "lucide-react";
+// import { useState } from "react";
 
-import type { Project } from "@/types/project/project";
+// import type { Project } from "@/types/project/project";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
+// import { Button } from "@/components/ui/button";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+// import { Progress } from "@/components/ui/progress";
 
-interface Props {
-  project: Project;
-}
+// interface Props {
+//   project: Project;
+// }
 
-export default function ProjectSidebarDonation({ project }: Props) {
-  const [amount, setAmount] = useState("");
+export default function ProjectSidebarDonation(
+  {
+    /*{ project }: Props*/
+  },
+) {
+  // const [amount, setAmount] = useState("");
 
   return (
     <>
-      <Card>
+      {/* <Card>
         <CardContent className="p-6 space-y-4">
           <div className="text-center">
             <div className="text-3xl font-bold text-sky-500 mb-2">
@@ -77,7 +81,7 @@ export default function ProjectSidebarDonation({ project }: Props) {
             후원하기
           </Button>
         </CardContent>
-      </Card>
+      </Card> */}
     </>
   );
 }

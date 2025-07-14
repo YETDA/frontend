@@ -1,24 +1,28 @@
-import { User, MessageCircle } from "lucide-react";
+// import { User, MessageCircle } from "lucide-react";
 
-import type { Creator } from "@/types/project/creator";
+// import type { Creator } from "@/types/project/creator";
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+// import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+// import { Button } from "@/components/ui/button";
+// import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
-interface Props {
-  creator: Creator;
-  stats: {
-    likes: number;
-    shares: number;
-    views: number;
-  };
-}
+// interface Props {
+//   creator: Creator;
+//   stats: {
+//     likes: number;
+//     shares: number;
+//     views: number;
+//   };
+// }
 
-export default function ProjectSidebarPanel({ creator }: Props) {
+export default function ProjectSidebarPanel(
+  {
+    /*{ creator }: Props*/
+  },
+) {
   return (
     <>
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle>창작자 정보</CardTitle>
         </CardHeader>
@@ -51,7 +55,7 @@ export default function ProjectSidebarPanel({ creator }: Props) {
             </Button>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
     </>
   );
 }

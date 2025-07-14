@@ -10,9 +10,9 @@ interface Props {
 export default function ProjectSidebar({ project }: Props) {
   return (
     <div className="space-y-6">
-      <ProjectSidebarDonation project={project} />
+      {/* <ProjectSidebarDonation project={project} />
 
-      <ProjectSidebarPanel creator={project.creator} stats={project.stats} />
+      <ProjectSidebarPanel creator={project.creator} stats={project.stats} /> */}
     </div>
   );
 }
