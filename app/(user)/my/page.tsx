@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import ProjectCard from "../components/ProjectCard";
 import { Follower } from "./components/Follower";
 import { Introduce } from "./components/Introduce";
@@ -91,27 +91,62 @@ const tabs: Tab[] = [
 ];
 
 const user = {
-  name: "서현우",
-  email: "seohyun@example.com",
-  github: "https://github.com/seohyun",
-  introduce: "안녕하세요, 서현우입니다. 개발자입니다.",
-  image: "/images/sample-image.jpg",
-  followers: 120,
-  following: 80,
-  purchaseProjects: 5,
-  donation: 10,
+  timestamp: "2025-07-13 04:24:32",
+  statusCode: 200,
+  message: "마이페이지 정보 조회 성공",
+  data: {
+    name: "김주영",
+    email: "mywndud23@naver.com",
+    introduce: null,
+    portfolioAddress: null,
+    image:
+      "http://img1.kakaocdn.net/thumb/R640x640.q70/?fname=http://t1.kakaocdn.net/account_images/default_profile.jpeg",
+  },
+};
+
+type FollowData = {
+  timestamp: string;
+  statusCode: number;
+  message: string;
+  data: number[];
 };
 
 export default function MyPage() {
+  const [userData, setUserData] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/mypage`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLquYDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ1Mzk5NiwiZXhwIjoxNzUyNDY0Nzk2fQ.I3c44CfZvJdnKF5SpVfGJuBEGyUb6E7g1QI_wG9f3W0`,
+            },
+          },
+        );
+
+        const data = await res.json();
+        setUserData(data);
+      } catch (err) {
+        console.error("로그인 필요 또는 인증 실패:", err);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <main>
-      {isEditing ? (
-        <ProfileEditForm user={user} onProfileClick={setIsEditing} />
+      {!userData ? (
+        <div>로딩 중...</div>
+      ) : isEditing ? (
+        <ProfileEditForm user={userData.data} onProfileClick={setIsEditing} />
       ) : (
         <>
-          <Profile onEditClick={setIsEditing} />
+          <Profile user={userData.data} onEditClick={setIsEditing} />
           <TabBar defaultValue="소개글" tabs={tabs} />
         </>
       )}
