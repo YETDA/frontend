@@ -161,8 +161,7 @@ export default function SuccessPage(): JSX.Element {
         throw new Error("query parameter가 없습니다.");
       }
 
-      // TossPurchaseApi 호출 (amount는 서버쪽에서 1로 고정 처리)
-      return await TossPurchaseApi(paymentKey, orderId);
+      return await TossPurchaseApi(paymentKey, orderId, Number(amount));
     }
 
     confirm()
