@@ -12,6 +12,8 @@ import { useFollowing } from "@/app/api/my/useFollowing";
 import { usePurchase } from "@/app/api/my/usePurchase";
 import MyProjectCard from "./components/ui/MyProjectCard";
 import { PurchaseProject } from "@/types/user/purchaseProject";
+import { useOoderList } from "@/app/api/my/useOrderList";
+import { Order } from "@/types/user/orderList";
 
 interface Tab {
   value: string;
@@ -28,27 +30,28 @@ export default function MyPage() {
   const following = useFollowing();
   const followers = useFollow();
   const purchaseProjects: PurchaseProject | null = usePurchase();
+  const orderList: Order[] | null = useOoderList();
+
+  const fetchUser = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/mypage`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLqsJDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ5NTY5NywiZXhwIjoxNzUyNTA2NDk3fQ.0VL3n2CVJgna0eXp2ZAtRV5Xxc5vGYqq_xbEYJj1XOA`,
+          },
+        },
+      );
+
+      const data = await res.json();
+      setUserData(data);
+    } catch (err) {
+      console.error("로그인 필요 또는 인증 실패:", err);
+    }
+  };
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/mypage`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLquYDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ4NjEyNywiZXhwIjoxNzUyNDk2OTI3fQ.h3OWtqbunjSOAHQ7b-kWsrMjmHOkw2b8QLHmsm85Kps`,
-            },
-          },
-        );
-
-        const data = await res.json();
-        setUserData(data);
-      } catch (err) {
-        console.error("로그인 필요 또는 인증 실패:", err);
-      }
-    };
-
     fetchUser();
   }, []);
 
@@ -128,10 +131,18 @@ export default function MyPage() {
       {!userData ? (
         <div>로딩 중...</div>
       ) : isEditing ? (
-        <ProfileEditForm user={userData.data} onProfileClick={setIsEditing} />
+        <ProfileEditForm
+          user={userData.data}
+          onProfileClick={setIsEditing}
+          onSubmitSuccess={fetchUser}
+        />
       ) : (
         <>
-          <Profile user={userData.data} onEditClick={setIsEditing} />
+          <Profile
+            user={userData.data}
+            purchaseProject={orderList?.length ?? 0}
+            onEditClick={setIsEditing}
+          />
           <TabBar defaultValue="소개글" tabs={tabs} />
         </>
       )}
