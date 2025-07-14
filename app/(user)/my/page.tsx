@@ -47,13 +47,11 @@ export default function MyPage() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLqsJDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ5NTY5NywiZXhwIjoxNzUyNTA2NDk3fQ.0VL3n2CVJgna0eXp2ZAtRV5Xxc5vGYqq_xbEYJj1XOA`,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLqsJDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ5ODIwMiwiZXhwIjoxNzUyNTA5MDAyfQ.cupYrTLW22_bFA7jH09ep5oEuKrNBpDg4fgdaiPabb8`,
           },
         },
       );
-
-      const data = await res;
-      setUserData(data);
+      setUserData(res.data);
     } catch (err) {
       console.error("로그인 필요 또는 인증 실패:", err);
     }
