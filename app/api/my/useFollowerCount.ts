@@ -21,7 +21,7 @@ export function useFollowCount() {
     const fetchFollow = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/order`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/follow/count`,
           {
             method: "GET",
             headers: {
