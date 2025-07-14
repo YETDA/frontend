@@ -42,54 +42,6 @@ const following = [
   },
 ];
 
-const tabs: Tab[] = [
-  {
-    value: "소개글",
-    content: <Introduce />,
-  },
-  {
-    value: "팔로워",
-    content: <Follower user={followers} following={following} />,
-  },
-  {
-    value: "팔로잉",
-    content: <Follower user={following} following={following} />,
-  },
-  {
-    value: "후원한 예따",
-    content: (
-      <div className="grid grid-cols-4 justify-items-center">
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
-      </div>
-    ),
-  },
-  {
-    value: "구매한 예따",
-    content: (
-      <div className="grid grid-cols-4 justify-items-center">
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
-      </div>
-    ),
-  },
-  {
-    value: "등록한 프로젝트",
-    content: (
-      <div className="grid grid-cols-4 justify-items-center">
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
-      </div>
-    ),
-  },
-];
-
 type FollowData = {
   timestamp: string;
   statusCode: number;
@@ -123,6 +75,54 @@ export default function MyPage() {
 
     fetchUser();
   }, []);
+
+  const tabs: Tab[] = [
+    {
+      value: "소개글",
+      content: <Introduce introduce={userData.data.introduce} />,
+    },
+    {
+      value: "팔로워",
+      content: <Follower user={followers} following={following} />,
+    },
+    {
+      value: "팔로잉",
+      content: <Follower user={following} following={following} />,
+    },
+    {
+      value: "후원한 예따",
+      content: (
+        <div className="grid grid-cols-4 justify-items-center">
+          <ProjectCard />
+          <ProjectCard />
+          <ProjectCard />
+          <ProjectCard />
+        </div>
+      ),
+    },
+    {
+      value: "구매한 예따",
+      content: (
+        <div className="grid grid-cols-4 justify-items-center">
+          <ProjectCard />
+          <ProjectCard />
+          <ProjectCard />
+          <ProjectCard />
+        </div>
+      ),
+    },
+    {
+      value: "등록한 프로젝트",
+      content: (
+        <div className="grid grid-cols-4 justify-items-center">
+          <ProjectCard />
+          <ProjectCard />
+          <ProjectCard />
+          <ProjectCard />
+        </div>
+      ),
+    },
+  ];
 
   return (
     <main>
