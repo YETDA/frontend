@@ -1,18 +1,25 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import ProjectCard from "../components/ProjectCard";
+
+// UI / 카드 컴포넌트
+import MyProjectCard from "./components/ui/MyProjectCard";
+
+// 마이페이지 구성 컴포넌트
 import { Follower } from "./components/Follower";
 import { Introduce } from "./components/Introduce";
 import { Profile } from "./components/Profile";
 import { TabBar } from "./components/TabBar";
 import { ProfileEditForm } from "./components/ProfileEditForm";
+
+// API 호출 관련
 import { useFollow } from "@/app/api/my/useFollow";
 import { useFollowing } from "@/app/api/my/useFollowing";
 import { usePurchase } from "@/app/api/my/usePurchase";
-import MyProjectCard from "./components/ui/MyProjectCard";
-import { PurchaseProject } from "@/types/user/purchaseProject";
 import { useOrderList } from "@/app/api/my/useOrderList";
+
+// 타입 정의
+import { PurchaseProject } from "@/types/user/purchaseProject";
 import { Order } from "@/types/user/orderList";
 
 interface Tab {
