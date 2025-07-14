@@ -20,8 +20,9 @@ interface User {
 interface ProfileProps {
   user: User;
   onEditClick: (isEditing: boolean) => void;
+  purchaseProject: number;
 }
-export function Profile({ user, onEditClick }: ProfileProps) {
+export function Profile({ user, onEditClick, purchaseProject }: ProfileProps) {
   const followData = useFollowCount();
 
   return (
@@ -73,7 +74,7 @@ export function Profile({ user, onEditClick }: ProfileProps) {
 
             <div className="grid grid-rows-2">
               <p className="text-[#868e96] text-sm">구매수</p>
-              <p className="font-bold">0</p>
+              <p className="font-bold">{purchaseProject}</p>
             </div>
 
             <div className="grid grid-rows-2">
