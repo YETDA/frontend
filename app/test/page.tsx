@@ -1,41 +1,54 @@
 "use client";
 
 import { useState } from "react";
-import { CreatePurchaseInfo } from "../api/test/TestApi";
+import { getUserInfo } from "@/app/api/user/UserInfo";
+import { useAuthStore } from "@/stores/useAuthStore";
+
+interface UserInfo {
+  id: number;
+  username: string;
+  email: string;
+}
 
 export default function TestPage() {
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState("");
+  const [userData, setUserData] = useState<UserInfo | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handlePurchase = async () => {
+  const token = useAuthStore.getState().accessToken;
+  console.log("토큰 값", token);
+
+  const handleUserInfo = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      // 1) 서버에 주문 생성 요청
-      const { orderId, totalAmount } = await CreatePurchaseInfo();
-
-      // 2) /toss 페이지를 새 창으로 열기 (orderId, totalAmount 를 쿼리로 전달)
-      const url = `/toss?orderId=${encodeURIComponent(orderId)}&amount=${encodeURIComponent(totalAmount)}`;
-      window.open(url, "TossPayment", "width=600,height=700,left=200,top=100");
+      const data = await getUserInfo(token);
+      setUserData(data);
     } catch (err) {
-      console.error(err);
-      setError("결제 정보 생성에 실패했습니다.");
+      setError("유저 정보 조회에 실패했습니다.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "20px",
-        }}
+    <div className="p-8">
+      <h1 className="text-2xl mb-4">테스트 페이지</h1>
+      <button
+        onClick={handleUserInfo}
+        className="px-4 py-2 bg-blue-500 text-white rounded mb-4"
       >
-        <h1>테스트 페이지</h1>
+        유저 정보 조회
+      </button>
 
-        <button onClick={handlePurchase}>토스 결제 테스트 버튼</button>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </div>
+      {loading && <p>로딩 중…</p>}
+      {error && <p className="text-red-500">{error}</p>}
+
+      {userData && (
+        <pre className="mt-4 bg-gray-100 p-4 rounded">
+          {JSON.stringify(userData, null, 2)}
+        </pre>
+      )}
     </div>
   );
 }
