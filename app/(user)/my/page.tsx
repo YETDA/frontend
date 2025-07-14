@@ -14,42 +14,6 @@ interface Tab {
   value: string;
   content: React.ReactNode;
 }
-const followers = [
-  {
-    id: "1",
-    name: "John Doe",
-    image: "/images/sample-image.jpg",
-    introduce: "안녕하세요, John Doe입니다. 개발자입니다.",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    image: "/images/sample-image.jpg",
-    introduce: "안녕하세요, Jane Smith입니다. 디자이너입니다.",
-  },
-];
-
-const following = [
-  {
-    id: "1",
-    name: "John Doe",
-    image: "/images/sample-image.jpg",
-    introduce: "안녕하세요, John Doe입니다. 개발자입니다.",
-  },
-  {
-    id: "3",
-    name: "Bob Brown",
-    image: "/images/sample-image.jpg",
-    introduce: "안녕하세요, Bob Brown입니다. 기획자입니다.",
-  },
-];
-
-type FollowData = {
-  timestamp: string;
-  statusCode: number;
-  message: string;
-  data: number[];
-};
 
 export default function MyPage() {
   const [userData, setUserData] = useState<any>(null);
