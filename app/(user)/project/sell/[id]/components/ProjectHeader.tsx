@@ -34,7 +34,7 @@ export default function ProjectHeader({ project }: Props) {
             </AvatarFallback>
           </Avatar>
           <div>
-            <h3 className="font-semibold">{project.name ?? "알 수 없음"}</h3>
+            <h3 className="font-semibold">{project.name ?? "없어요"}</h3>
             <div className="flex items-center space-x-4 text-sm text-gray-600">
               <span>프로젝트 {project.projectCount ?? 0}개</span>
               <span>
