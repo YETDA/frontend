@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React, { useEffect, useState, useRef, useCallback } from "react";
 
 import { popularProjectApi } from "@/app/api/popular-project/api";
@@ -59,13 +60,15 @@ export default function Home() {
 
       <div className="grid grid-cols-4 gap-10 px-4">
         {projects.map((project, idx) => (
-          <ProjectCard
-            key={`${project.id}-${idx}`}
-            hostName={project.hostName}
-            thumbnail={project.thumbnail ?? "/images/sample-image.jpg"}
-            title={project.title}
-            sellingAmount={project.sellingAmount}
-          />
+          <Link href={`/project/sell/${project.id}`} key={project.id}>
+            <ProjectCard
+              key={`${project.id}-${idx}`}
+              hostName={project.hostName}
+              thumbnail={project.thumbnail ?? "/images/sample-image.jpg"}
+              title={project.title}
+              sellingAmount={project.sellingAmount}
+            />
+          </Link>
         ))}
       </div>
 

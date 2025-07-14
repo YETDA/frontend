@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { searchResultApi } from "@/app/api/search/api";
 import ProjectCard from "../components/ProjectCard";
 import { toCardData, CardData } from "@/utils/adapter";
+import Link from "next/link";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
@@ -64,13 +65,15 @@ export default function SearchPage() {
 
       <div className="grid grid-cols-4 gap-10 px-4">
         {projects.map(p => (
-          <ProjectCard
-            key={p.id}
-            hostName={p.hostName}
-            thumbnail={p.thumbnail}
-            title={p.title}
-            sellingAmount={p.sellingAmount}
-          />
+          <Link href={`/project/sell/${p.id}`} key={p.id}>
+            <ProjectCard
+              key={p.id}
+              hostName={p.hostName}
+              thumbnail={p.thumbnail}
+              title={p.title}
+              sellingAmount={p.sellingAmount}
+            />
+          </Link>
         ))}
       </div>
     </div>
