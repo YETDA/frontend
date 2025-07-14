@@ -1,20 +1,17 @@
 import { notFound } from "next/navigation";
-
 import type { Project } from "@/types/project/project";
-
 import { getSellProjectById } from "@/app/api/project";
-
 import ProjectDescriptionTabs from "./components/ProjectDescriptionTabs";
 import ProjectHeader from "./components/ProjectHeader";
 import ProjectImageGallery from "./components/ProjectImageGallery";
 import ProjectSidebar from "./components/ProjectSidebar";
 
-interface Props {
-  params: { id: string };
-}
-
-export default async function ProjectDetailPage({ params }: Props) {
-  const id = String(params.id);
+export default async function ProjectDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   const project: Project | null = await getSellProjectById(id);
 
   if (!project) {
