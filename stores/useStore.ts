@@ -1,33 +1,77 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import type { ExampleSlice } from "./exampleSlice";
+interface CommonUserInfo {
+  userId: string;
+  isAuthenticated: boolean;
+}
 
-import { createExampleSlice } from "./exampleSlice";
+export interface UserInfo {
+  email: string;
+  name: string;
+  image: string;
+  portfolioAddress?: string;
+  introduce?: string;
+}
 
-/**
- * Store 타입 정의
- * - 여러 slice 타입을 &로 합쳐서 하나의 store로 만듦
- * - 모든 상태와 액션을 한 곳에서 관리
- * 예: CounterSlice & UserSlice
- */
-type Store = ExampleSlice;
+type User = CommonUserInfo & UserInfo;
 
-/**
- * useStore
- * - zustand 중앙 스토어 생성
- * - persist 미들웨어로 localStorage에 자동 저장
- */
-export const useStore = create<Store>()(
+const defaultTempUser: CommonUserInfo = {
+  userId: "",
+  isAuthenticated: false,
+};
+
+const defaultUser: User = {
+  ...defaultTempUser,
+  email: "",
+  name: "",
+  image: "",
+  portfolioAddress: "",
+  introduce: "",
+};
+
+type PersistMode = "pre-login" | "post-login";
+
+type UserStore = {
+  persistMode: PersistMode;
+  setPersistMode: (mode: PersistMode) => void;
+
+  user: User;
+  setUser: (data: Partial<User>) => void;
+  clearUser: () => void;
+  isAuthenticated: () => boolean;
+};
+
+export const useUserStore = create<UserStore>()(
   persist(
-    (...a) => ({
-      ...createExampleSlice(...a),
+    (set, get) => ({
+      user: defaultUser,
+      setUser: data =>
+        set(state => ({
+          user: { ...state.user, ...data },
+        })),
+      clearUser: () => set({ user: defaultUser }),
+
+      persistMode: "pre-login",
+      setPersistMode: mode => set({ persistMode: mode }),
+      isAuthenticated: () => Boolean(get().user.isAuthenticated),
     }),
+
     {
-      name: "global-store", // localStorage 키 이름
+      name: "user-store",
+
+      partialize: state => {
+        if (state.persistMode === "post-login") {
+          return {
+            user: state.user,
+            persistMode: state.persistMode,
+          };
+        } else {
+          return {
+            persistMode: state.persistMode,
+          };
+        }
+      },
     },
   ),
 );
-
-// https://zustand.docs.pmnd.rs/guides/typescript#slices-pattern
-//

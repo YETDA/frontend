@@ -4,14 +4,21 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { searchResultApi } from "@/apis/search/api";
 import ProjectCard from "../components/ProjectCard";
-import { toCardData, CardData } from "@/utils/adapter";
 import Link from "next/link";
+
+interface RawProject {
+  id: number;
+  hostName: string;
+  thumbnail: string;
+  title: string;
+  sellingAmount: number;
+}
 
 export default function SearchClient() {
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword") ?? "";
 
-  const [projects, setProjects] = useState<CardData[]>([]);
+  const [projects, setProjects] = useState<RawProject[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,12 +37,11 @@ export default function SearchClient() {
 
       try {
         const res = await searchResultApi(keyword);
-        const rawList = res.data.content || [];
-        const normalized: CardData[] = rawList.map(toCardData);
+        const rawList: RawProject[] = res.data.content || [];
 
-        setProjects(normalized);
-        setTotalCount(res.data.totalElements ?? normalized.length);
-      } catch (e: unknown) {
+        setProjects(rawList);
+        setTotalCount(res.data.totalElements ?? rawList.length);
+      } catch (e: any) {
         console.error("검색 실패:", e);
 
         if (e instanceof Error) {
