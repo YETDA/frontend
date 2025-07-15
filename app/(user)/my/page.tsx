@@ -46,7 +46,7 @@ export default function MyPage() {
       const timeout = setTimeout(() => {
         alert("로그인이 필요합니다.");
         router.push("/login");
-      }, 500); // 약간의 딜레이
+      }, 300); // 약간의 딜레이
       return () => clearTimeout(timeout);
     }
     setIsAuthLoading(false);
