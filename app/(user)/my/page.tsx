@@ -156,7 +156,7 @@ export default function MyPage() {
         <div>로딩 중...</div>
       ) : isEditing ? (
         <ProfileEditForm
-          user={userData.data}
+          user={userData}
           onProfileClick={setIsEditing}
           onSubmitSuccess={fetchUser}
         />
