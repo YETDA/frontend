@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { GithubBadge } from "./GithubBadge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/MyTooltip";
 
-interface User {
+export interface User {
   name: string;
   email?: string;
   portfolioAddress?: string;

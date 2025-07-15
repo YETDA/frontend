@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useUserStore } from "@/stores/useStore";
+import { useHasHydrated } from "./useHasHydrated";
 
 export interface FollowingCount {
   userId: number;
@@ -16,16 +18,21 @@ export interface FollowingResponse {
 
 export function useFollowing() {
   const [followData, setFollowData] = useState<FollowingResponse | null>(null);
+  const hasHydrated = useHasHydrated();
+  const isAuthenticated = useUserStore(state => state.isAuthenticated());
 
   useEffect(() => {
+    if (hasHydrated || !isAuthenticated) {
+      return;
+    }
+    if (typeof isAuthenticated !== "boolean") return;
+
     const fetchFollow = async () => {
       try {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/v1/follow/following`,
           {
-            headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLqsJDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ5NTY5NywiZXhwIjoxNzUyNTA2NDk3fQ.0VL3n2CVJgna0eXp2ZAtRV5Xxc5vGYqq_xbEYJj1XOA`,
-            },
+            withCredentials: true,
           },
         );
 
@@ -36,7 +43,7 @@ export function useFollowing() {
     };
 
     fetchFollow();
-  }, []);
+  }, [hasHydrated, isAuthenticated]);
 
   return followData;
 }
