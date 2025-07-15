@@ -45,10 +45,7 @@ export default function MyPage() {
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/mypage`,
         {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLqsJDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjQ5ODIwMiwiZXhwIjoxNzUyNTA5MDAyfQ.cupYrTLW22_bFA7jH09ep5oEuKrNBpDg4fgdaiPabb8`,
-          },
+          withCredentials: true,
         },
       );
       setUserData(res.data);
