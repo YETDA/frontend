@@ -36,7 +36,7 @@ module.exports = {
     "prettier/prettier": [
       "error",
       {
-        singleQuote: false
+        singleQuote: false,
       },
     ],
 
@@ -46,17 +46,19 @@ module.exports = {
      * 최신 perfectionist는 옵션 없이 error만 설정 가능
      * 커스텀 그룹 옵션 제거!
      */
-    "perfectionist/sort-imports": "error",
+    // "perfectionist/sort-imports": "error",
 
     "import/no-unresolved": "error",
     "import/no-cycle": "error",
 
-    "@typescript-eslint/consistent-type-imports": [
-      "error",
-      {
-        fixStyle: "separate-type-imports",
-      },
-    ],
+    // "@typescript-eslint/consistent-type-imports": [
+    //   "error",
+    //   {
+    //     fixStyle: "separate-type-imports",
+    //   },
+    // ],
+    "perfectionist/sort-imports": "off",
+    "@typescript-eslint/consistent-type-imports": "off",
     "@typescript-eslint/no-implied-eval": "error",
   },
 };
