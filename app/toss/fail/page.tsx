@@ -1,11 +1,10 @@
 "use client";
 
+import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import React from "react";
-
 import "../App.css";
 
-export default function FailPage(): JSX.Element {
+function FailContent(): React.JSX.Element {
   const searchParams = useSearchParams();
   const message = searchParams.get("message") ?? "";
   const code = searchParams.get("code") ?? "";
@@ -59,5 +58,17 @@ export default function FailPage(): JSX.Element {
         </a>
       </div>
     </div>
+  );
+}
+
+export default function FailPage(): React.JSX.Element {
+  return (
+    <Suspense
+      fallback={
+        <p className="p-8 text-gray-400">결제 실패 정보 불러오는 중...</p>
+      }
+    >
+      <FailContent />
+    </Suspense>
   );
 }

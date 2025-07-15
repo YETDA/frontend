@@ -68,9 +68,9 @@ export default function SellProjectPage() {
     });
 
     const res = await createPurchaseProject(form);
-    const result = await res.json();
+    const result = res.data;
 
-    if (!res.ok) throw new Error(result?.message || "업로드 실패");
+    // if (!res.ok) throw new Error(result?.message || "업로드 실패");
 
     const projectId = result?.data?.projectId;
     alert("등록 완료");

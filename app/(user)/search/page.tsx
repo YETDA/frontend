@@ -1,81 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { searchResultApi } from "@/app/api/search/api";
-import ProjectCard from "../components/ProjectCard";
-import { toCardData, CardData } from "@/utils/adapter";
-import Link from "next/link";
+import { Suspense } from "react";
+import SearchClient from "./SearchClient";
 
 export default function SearchPage() {
-  const searchParams = useSearchParams();
-  const keyword = searchParams.get("keyword") ?? "";
-
-  const [projects, setProjects] = useState<CardData[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (keyword.length < 2) {
-      setProjects([]);
-      setTotalCount(0);
-      setError(null);
-      return;
-    }
-
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const res = await searchResultApi(keyword);
-        const rawList = res.data.content || [];
-        const normalized: CardData[] = rawList.map(toCardData);
-
-        setProjects(normalized);
-        setTotalCount(res.data.totalElements ?? normalized.length);
-      } catch (e: any) {
-        console.error("검색 실패:", e);
-        setError(e.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [keyword]);
-
   return (
-    <div className="w-full h-fit flex flex-col items-center justify-center">
-      {keyword.length < 2 ? (
-        <p className="mt-4 text-gray-500">
-          검색어를 최소 2글자 이상 입력해주세요.
-        </p>
-      ) : loading ? (
-        <p className="mt-4">검색 중…</p>
-      ) : error ? (
-        <p className="mt-4 text-red-500">에러 발생: {error}</p>
-      ) : (
-        <div className="w-full flex justify-start items-center px-4 pt-4 pb-10">
-          <div className="text-[#0064FF]">{totalCount}</div>개의 검색결과가
-          있습니다.
-        </div>
-      )}
-
-      <div className="grid grid-cols-4 gap-10 px-4">
-        {projects.map(p => (
-          <Link href={`/project/sell/${p.id}`} key={p.id}>
-            <ProjectCard
-              key={p.id}
-              hostName={p.hostName}
-              thumbnail={p.thumbnail}
-              title={p.title}
-              sellingAmount={p.sellingAmount}
-            />
-          </Link>
-        ))}
-      </div>
-    </div>
+    <Suspense fallback={<p className="p-4 text-gray-500">검색 중입니다...</p>}>
+      <SearchClient />
+    </Suspense>
   );
 }

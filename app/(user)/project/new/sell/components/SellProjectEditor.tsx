@@ -1,4 +1,3 @@
-// app/project/sell/components/SellProjectEditor.tsx
 "use client";
 
 import { ArrowLeft } from "lucide-react";

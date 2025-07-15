@@ -1,26 +1,28 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 
 import type { ProductFormData } from "@/types/productFormData";
-
 import { getSellProjectById, updatePurchaseProject } from "@/app/api/project";
 
 import SellProjectEditor from "../../components/SellProjectEditor";
 
-interface Props {
-  params: { id: string };
-}
-
-export default function EditProjectPage({ params }: Props) {
+export default function EditProjectPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const router = useRouter();
+  const { id } = use(params);
+
   const [initialFormData, setInitialFormData] =
     useState<ProductFormData | null>(null);
 
   useEffect(() => {
     (async () => {
-      const project = await getSellProjectById(params.id);
+      const project = await getSellProjectById(id);
+
       if (!project) {
         alert("프로젝트 정보를 불러오지 못했습니다.");
         return;
@@ -33,7 +35,7 @@ export default function EditProjectPage({ params }: Props) {
         category: project.purchaseCategoryName ?? "",
         price: project.purchaseOptions?.[0]?.price?.toString() ?? "",
         images: project.contentImageUrls.map(url => ({
-          file: undefined as unknown as File, // file이 필수이므로 타입 일치시킴
+          file: undefined,
           previewUrl: url,
         })),
         options: project.purchaseOptions.map(opt => ({
@@ -49,7 +51,7 @@ export default function EditProjectPage({ params }: Props) {
 
       setInitialFormData(converted);
     })();
-  }, [params.id]);
+  }, [id]);
 
   const handleSubmit = async (formData: ProductFormData) => {
     try {
@@ -90,13 +92,13 @@ export default function EditProjectPage({ params }: Props) {
         }
       });
 
-      const res = await updatePurchaseProject(params.id, form);
+      const res = await updatePurchaseProject(id, form);
       if (res.status !== 200) {
         throw new Error("수정 실패");
       }
 
       alert("수정 완료");
-      router.push(`/project/sell/${params.id}`);
+      router.push(`/project/sell/${id}`);
     } catch (err) {
       console.error(err);
       alert("프로젝트 수정 중 오류 발생");
