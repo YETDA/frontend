@@ -1,11 +1,8 @@
 "use client";
 
 import type { ChangeEvent } from "react";
-
 import { Plus, X } from "lucide-react";
-
 import type { ProductFormData } from "@/types/productFormData";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -25,7 +22,13 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
   const handleAddOption = () => {
     onUpdate("options", [
       ...formData.options,
-      { name: "", price: "", description: "" },
+      {
+        name: "",
+        price: "",
+        description: "",
+        file: undefined,
+        deliveryMethod: "FILE_UPLOAD",
+      },
     ]);
   };
 
@@ -50,6 +53,16 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
   const handleFileChange = (index: number, file: File) => {
     const updated = formData.options.map((opt, i) =>
       i === index ? { ...opt, file } : opt,
+    );
+    onUpdate("options", updated);
+  };
+
+  const handleChangeDeliveryMethod = (
+    index: number,
+    method: "FILE_UPLOAD" | "EMAIL_SEND",
+  ) => {
+    const updated = formData.options.map((opt, i) =>
+      i === index ? { ...opt, deliveryMethod: method } : opt,
     );
     onUpdate("options", updated);
   };
@@ -83,6 +96,34 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
             key={index}
             className="border border-gray-300 rounded-xl p-6 space-y-5"
           >
+            <div>
+              <Label className="mb-1 block">전달 방식</Label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    value="FILE_UPLOAD"
+                    checked={option.deliveryMethod === "FILE_UPLOAD"}
+                    onChange={() =>
+                      handleChangeDeliveryMethod(index, "FILE_UPLOAD")
+                    }
+                  />
+                  파일 업로드
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    value="EMAIL_SEND"
+                    checked={option.deliveryMethod === "EMAIL_SEND"}
+                    onChange={() =>
+                      handleChangeDeliveryMethod(index, "EMAIL_SEND")
+                    }
+                  />
+                  메일 전송
+                </label>
+              </div>
+            </div>
+
             <div className="flex justify-between items-center">
               <h4 className="text-base font-medium text-gray-800">
                 옵션 {index + 1}
@@ -129,24 +170,26 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
               />
             </div>
 
-            <div>
-              <Label className="mb-1 block">첨부 파일 (선택)</Label>
-              <div className="flex items-center space-x-2">
-                <Input
-                  type="file"
-                  accept="application/pdf,image/*"
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleFileChange(index, file);
-                  }}
-                />
-                {option.file && (
-                  <span className="text-sm text-gray-600">
-                    {option.file.name}
-                  </span>
-                )}
+            {option.deliveryMethod === "FILE_UPLOAD" && (
+              <div>
+                <Label className="mb-1 block">첨부 파일 (선택)</Label>
+                <div className="flex items-center space-x-2">
+                  <Input
+                    type="file"
+                    accept="application/pdf,image/*"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileChange(index, file);
+                    }}
+                  />
+                  {option.file && (
+                    <span className="text-sm text-gray-600">
+                      {option.file.name}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         ))}
       </CardContent>

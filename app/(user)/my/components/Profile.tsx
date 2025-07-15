@@ -1,7 +1,7 @@
 import { Mail } from "lucide-react";
 import Image from "next/image";
 
-import { useFollowCount } from "@/app/api/my/useFollowCount";
+import { useFollowCount } from "@/apis/my/useFollowCount";
 import { Button } from "@/components/ui/button";
 
 import { GithubBadge } from "./GithubBadge";

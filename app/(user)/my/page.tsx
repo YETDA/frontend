@@ -13,10 +13,10 @@ import { TabBar } from "./components/TabBar";
 import { ProfileEditForm } from "./components/ProfileEditForm";
 
 // API 호출 관련
-import { useFollow } from "@/app/api/my/useFollow";
-import { useFollowing } from "@/app/api/my/useFollowing";
-import { usePurchase } from "@/app/api/my/usePurchase";
-import { useOrderList } from "@/app/api/my/useOrderList";
+import { useFollow } from "@/apis/my/useFollow";
+import { useFollowing } from "@/apis/my/useFollowing";
+import { usePurchase } from "@/apis/my/usePurchase";
+import { useOrderList } from "@/apis/my/useOrderList";
 import axios from "axios";
 
 // 타입 정의
