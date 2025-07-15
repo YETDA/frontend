@@ -58,10 +58,12 @@ export function ProfileEditForm({
 
       const response = await axios.put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/mypage`,
+        formData,
         {
-          method: "PUT",
-          body: formData,
           withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
       );
 
