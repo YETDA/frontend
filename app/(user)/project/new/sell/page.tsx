@@ -7,6 +7,7 @@ import type { ProductFormData } from "@/types/productFormData";
 import { createPurchaseProject } from "@/app/api/project";
 import { useCheckLogin } from "@/app/api/my/useCheckLogin";
 import { useUserStore } from "@/stores/useStore";
+import SellProjectEditor from "./components/SellProjectEditor";
 
 export default function SellProjectPage() {
   useCheckLogin();
