@@ -8,7 +8,7 @@ export async function createPurchaseProject(formData: FormData) {
   try {
     const res = await fetch(`${API_URL}/api/v1/project/purchase`, {
       method: "POST",
-      credentials: "include", // 쿠키를 포함하여 요청
+      credentials: "include",
       body: formData,
     });
 
