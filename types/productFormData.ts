@@ -2,7 +2,7 @@ export interface ProductImage {
   file?: File;
   previewUrl: string;
 }
-
+type DeliveryMethod = "FILE_UPLOAD" | "EMAIL_SEND";
 export interface ProductFormData {
   title: string;
   subtitle: string;
@@ -15,6 +15,7 @@ export interface ProductFormData {
     price: string;
     description: string;
     file?: File;
+    deliveryMethod: DeliveryMethod;
   }[];
   creatorName: string;
   creatorBio: string;

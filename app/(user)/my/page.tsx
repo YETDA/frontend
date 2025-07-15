@@ -15,6 +15,7 @@ import { TabBar } from "./components/TabBar";
 import { ProfileEditForm } from "./components/ProfileEditForm";
 
 // API 호출 관련
+
 import { useFollow } from "@/app/api/my/useFollow";
 import { useFollowing } from "@/app/api/my/useFollowing";
 import { usePurchase } from "@/app/api/my/usePurchase";

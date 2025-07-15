@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 import type { ProductFormData } from "@/types/productFormData";
 
-import { createPurchaseProject } from "@/app/api/project";
+import { createPurchaseProject } from "@/apis/project";
 
 import SellProjectEditor from "./components/SellProjectEditor";
 
@@ -18,7 +18,14 @@ export default function SellProjectPage() {
     category: "",
     price: "",
     images: [],
-    options: [{ name: "STANDARD", price: "0", description: "" }],
+    options: [
+      {
+        name: "STANDARD",
+        price: "0",
+        description: "",
+        deliveryMethod: "FILE_UPLOAD",
+      },
+    ],
     creatorName: "",
     creatorBio: "",
     creatorAvatar: "",

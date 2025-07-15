@@ -4,7 +4,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState, Suspense } from "react";
 
 import "../App.css";
-import { TossPurchaseApi } from "@/app/api/project";
+import { TossPurchaseApi } from "@/apis/project";
+import Image from "next/image";
 
 type ConfirmResponse = Record<string, unknown>;
 
@@ -30,19 +31,21 @@ function SuccessContent() {
 
     confirm()
       .then(data => setResponseData(data))
-      .catch((error: any) => {
-        const code = encodeURIComponent(error.code ?? "UNKNOWN_ERROR");
-        const message = encodeURIComponent(error.message ?? "알 수 없는 오류");
-        router.push(`/toss/fail?code=${code}&message=${message}`);
+      .catch((error: unknown) => {
+        if (error instanceof Error) {
+          console.error(error.message);
+        } else {
+          console.error("알 수 없는 에러:", error);
+        }
       });
   }, [searchParams, router]);
 
   return (
     <>
       <div className="box_section" style={{ width: "600px" }}>
-        <img
-          width="100px"
+        <Image
           src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png"
+          width={100}
           alt="결제 완료"
         />
         <h2>결제를 완료했어요</h2>
