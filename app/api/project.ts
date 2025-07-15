@@ -7,21 +7,35 @@ const API_URL = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/+$/, "");
 const ACCESS_TOKEN =
   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLqsJDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjU0MDA4OCwiZXhwIjoxNzUyNTUwODg4fQ.DekyDDwG3sEqVjN0t2g61VUUUwtZdDVidou6A_lrkxg";
 
-export async function createPurchaseProject(formData: FormData) {
+export async function createPurchaseProject(
+  formData: FormData,
+  isAuthenticated: boolean,
+) {
+  ㅇ;
+  if (!isAuthenticated) {
+    throw new Error("로그인이 필요합니다.");
+  }
+
+  if (!isAuthenticated) {
+    return;
+  }
+  if (typeof isAuthenticated !== "boolean") return;
+
   try {
     const res = await axios.post(
       `${API_URL}/api/v1/project/purchase`,
       formData,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
+          "Content-Type": "multipart/form-data", // FormData이므로 명시
         },
+        withCredentials: true, // fetch의 credentials: "include"와 동일
       },
     );
-    return res;
-  } catch (err) {
-    console.error("프로젝트 등록 실패:", err);
+
+    return res.data;
+  } catch (err: any) {
+    console.error("프로젝트 등록 실패:", err.response?.data || err.message);
     throw err;
   }
 }
