@@ -8,8 +8,10 @@ import { useRouter } from "next/navigation";
 export function useCheckLogin() {
   const router = useRouter();
   const [userData, setUserData] = useState<UserInfo | null>(null);
+  const isAuthenticated = useUserStore(state => state.user.isAuthenticated);
 
   useEffect(() => {
+    if (isAuthenticated) return;
     const fetchUser = async () => {
       try {
         const res = await axios.get(
