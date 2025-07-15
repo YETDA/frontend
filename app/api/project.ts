@@ -11,7 +11,6 @@ export async function createPurchaseProject(
   formData: FormData,
   isAuthenticated: boolean,
 ) {
-  ㅇ;
   if (!isAuthenticated) {
     throw new Error("로그인이 필요합니다.");
   }
