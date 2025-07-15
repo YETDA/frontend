@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Bell, Heart } from "lucide-react";
 
 export default function Header() {
   return (
@@ -16,6 +17,7 @@ export default function Header() {
       </Link>
       {/* <div className="text-xs cursor-pointer">
         <div className="flex justify-center items-center gap-4">
+          <div>프로젝트 등록</div>
           <Bell width={20} height={20} />
           <Heart width={20} height={20} />
           <div className="flex justify-center itmes-center gap-2">
