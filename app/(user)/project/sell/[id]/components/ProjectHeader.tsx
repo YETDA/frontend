@@ -1,11 +1,13 @@
 "use client";
 
 import { Share2, User, Heart, Star } from "lucide-react";
+import Link from "next/link";
 
 import type { Project } from "@/types/project/project";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   project: Project;
@@ -14,8 +16,13 @@ interface Props {
 export default function ProjectHeader({ project }: Props) {
   return (
     <div className="mb-8">
-      <div className="mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <Badge variant="outline">{project.purchaseCategoryName}</Badge>
+        <Link href={`/project/new/sell/edit/${project.projectId}`}>
+          <Button variant="outline" size="sm">
+            수정하기
+          </Button>
+        </Link>
       </div>
 
       <h1 className="text-3xl font-bold mb-4">{project.title}</h1>

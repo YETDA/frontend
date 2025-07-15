@@ -1,5 +1,5 @@
 export interface ProductImage {
-  file: File;
+  file?: File;
   previewUrl: string;
 }
 
