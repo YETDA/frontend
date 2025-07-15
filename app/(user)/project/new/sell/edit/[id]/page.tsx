@@ -43,6 +43,7 @@ export default function EditProjectPage({
           price: opt.price.toString(),
           description: opt.content,
           file: undefined,
+          deliveryMethod: "FILE_UPLOAD",
         })),
         creatorName: project.name ?? "",
         creatorBio: project.userIntroduce ?? "",

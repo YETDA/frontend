@@ -18,7 +18,14 @@ export default function SellProjectPage() {
     category: "",
     price: "",
     images: [],
-    options: [{ name: "STANDARD", price: "0", description: "" }],
+    options: [
+      {
+        name: "STANDARD",
+        price: "0",
+        description: "",
+        deliveryMethod: "FILE_UPLOAD",
+      },
+    ],
     creatorName: "",
     creatorBio: "",
     creatorAvatar: "",
