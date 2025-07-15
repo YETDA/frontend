@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 // UI / 카드 컴포넌트
 import MyProjectCard from "./components/ui/MyProjectCard";
@@ -17,28 +19,44 @@ import { useFollow } from "@/app/api/my/useFollow";
 import { useFollowing } from "@/app/api/my/useFollowing";
 import { usePurchase } from "@/app/api/my/usePurchase";
 import { useOrderList } from "@/app/api/my/useOrderList";
-import axios from "axios";
+import { useUserStore } from "@/stores/useStore";
 
 // 타입 정의
 import { PurchaseProject } from "@/types/user/purchaseProject";
 import { Order } from "@/types/user/orderList";
+import { useCheckLogin } from "@/app/api/my/useCheckLogin";
 
 interface Tab {
   value: string;
   content: React.ReactNode;
 }
 
-interface PurchaseProjectResponse {
-  data: PurchaseProject;
-}
-
 export default function MyPage() {
+  useCheckLogin();
+
+  const router = useRouter();
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
   const [userData, setUserData] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const isAuthenticated = useUserStore(state => state.user.isAuthenticated);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      const timeout = setTimeout(() => {
+        alert("로그인이 필요합니다.");
+        router.push("/login");
+      }, 500); // 약간의 딜레이
+      return () => clearTimeout(timeout);
+    }
+    setIsAuthLoading(false);
+  }, [isAuthenticated]);
+
   const following = useFollowing();
   const followers = useFollow();
-  const purchaseProjects: PurchaseProject | null = usePurchase();
-  const orderList: Order[] | null = useOrderList();
+  const purchaseProjects: PurchaseProject | null | undefined = usePurchase();
+
+  const orderList: Order[] | null | undefined = useOrderList();
 
   const fetchUser = async () => {
     try {
@@ -48,21 +66,23 @@ export default function MyPage() {
           withCredentials: true,
         },
       );
-      setUserData(res.data);
+      setUserData(res.data.data);
     } catch (err) {
       console.error("로그인 필요 또는 인증 실패:", err);
     }
   };
 
   useEffect(() => {
-    fetchUser();
-  }, []);
+    if (isAuthenticated) {
+      fetchUser();
+    }
+  }, [isAuthenticated]);
 
   const tabs: Tab[] = userData
     ? [
         {
           value: "소개글",
-          content: <Introduce introduce={userData.data.introduce} />,
+          content: <Introduce introduce={userData.introduce} />,
         },
         {
           value: "팔로워",
@@ -142,7 +162,7 @@ export default function MyPage() {
       ) : (
         <>
           <Profile
-            user={userData.data}
+            user={userData}
             purchaseProject={orderList?.length ?? 0}
             onEditClick={setIsEditing}
           />

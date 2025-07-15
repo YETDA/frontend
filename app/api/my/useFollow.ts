@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useUserStore } from "@/stores/useStore";
+import { useHasHydrated } from "./useHasHydrated";
 
 export interface FollowCount {
   userId: number;
@@ -16,8 +18,13 @@ export interface FollowResponse {
 
 export function useFollow() {
   const [followData, setFollowData] = useState<FollowResponse | null>(null);
+  const hasHydrated = useHasHydrated();
+  const isAuthenticated = useUserStore(state => state.isAuthenticated());
 
   useEffect(() => {
+    if (!hasHydrated || !isAuthenticated) {
+      return;
+    }
     const fetchFollow = async () => {
       try {
         const res = await axios.get(
@@ -34,7 +41,7 @@ export function useFollow() {
     };
 
     fetchFollow();
-  }, []);
+  }, [hasHydrated, isAuthenticated]);
 
   return followData;
 }
