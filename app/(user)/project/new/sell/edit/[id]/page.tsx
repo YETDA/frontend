@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, use } from "react";
 
 import type { ProductFormData } from "@/types/productFormData";
-import { getSellProjectById, updatePurchaseProject } from "@/app/api/project";
+import { getSellProjectById, updatePurchaseProject } from "@/apis/project";
 
 import SellProjectEditor from "../../components/SellProjectEditor";
 
@@ -93,7 +93,7 @@ export default function EditProjectPage({
       });
 
       const res = await updatePurchaseProject(id, form);
-      if (res.status !== 200) {
+      if (!res.ok) {
         throw new Error("수정 실패");
       }
 

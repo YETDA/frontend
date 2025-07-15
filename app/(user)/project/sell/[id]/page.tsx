@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Project } from "@/types/project/project";
-import { getSellProjectById } from "@/app/api/project";
+import { getSellProjectById } from "@/apis/project";
 import ProjectDescriptionTabs from "./components/ProjectDescriptionTabs";
 import ProjectHeader from "./components/ProjectHeader";
 import ProjectImageGallery from "./components/ProjectImageGallery";

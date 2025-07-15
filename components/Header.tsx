@@ -30,9 +30,9 @@ export default function Header() {
           </div>
         </div>
       </div> */}
-      {/* <Link href="/login">
+      <Link href="/login">
         <div className="text-xs cursor-pointer">로그인/회원가입</div>
-      </Link> */}
+      </Link>
     </div>
   );
 }
