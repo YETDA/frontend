@@ -6,11 +6,8 @@ import type { ProductFormData } from "@/types/productFormData";
 
 import SellProjectEditor from "./components/SellProjectEditor";
 import { createPurchaseProject } from "@/apis/project";
-import { useCheckLogin } from "@/app/api/my/useCheckLogin";
 
 export default function SellProjectPage() {
-  useCheckLogin();
-
   const router = useRouter();
 
   const initialFormData: ProductFormData = {
