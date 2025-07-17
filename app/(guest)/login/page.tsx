@@ -1,17 +1,25 @@
 "use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function LoginPage() {
-  // 프론트 로컬로 설정 배포시 배포 서버로 설정해야함
-  const redirectUri = encodeURIComponent("http://localhost:3000");
+  const [redirectUri, setRedirectUri] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setRedirectUri(encodeURIComponent(window.location.origin));
+    }
+  }, []);
 
   const handleKakaoLogin = () => {
+    if (!redirectUri) return;
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/kakao?state=${redirectUri}`;
   };
 
   const handleGithubLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/github`;
   };
+
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center gap-10">
       <div className="flex flex-col h-fit items-center justify-center gap-3">
