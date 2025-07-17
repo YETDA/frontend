@@ -1,4 +1,3 @@
-// app/(user)/page.tsx
 import React, { Suspense } from "react";
 import HomeClient from "./components/HomeClient";
 
