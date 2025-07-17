@@ -11,7 +11,7 @@ export default function LoginPage() {
 
   const handleGithubLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/github`;
-  }; 
+  };
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center gap-10">
       <div className="flex flex-col h-fit items-center justify-center gap-3">
