@@ -37,20 +37,21 @@ export default function MyPage() {
   const purchaseProjects: PurchaseProject | null | undefined = usePurchase();
 
   const orderList: Order[] | null | undefined = useOrderList();
+
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/mypage`,
+        {
+          withCredentials: true,
+        },
+      );
+      setUserData(res.data.data);
+    } catch (err) {
+      console.error("로그인 필요 또는 인증 실패:", err);
+    }
+  };
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/mypage`,
-          {
-            withCredentials: true,
-          },
-        );
-        setUserData(res.data.data);
-      } catch (err) {
-        console.error("로그인 필요 또는 인증 실패:", err);
-      }
-    };
     fetchUser();
   }, []);
 
