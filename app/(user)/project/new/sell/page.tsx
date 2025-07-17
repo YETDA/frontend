@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import type { ProductFormData } from "@/types/productFormData";
 
 import SellProjectEditor from "./components/SellProjectEditor";
-import { createPurchaseProject } from "@/app/api/project";
+import { createPurchaseProject } from "@/apis/project";
 import { useCheckLogin } from "@/app/api/my/useCheckLogin";
 
 export default function SellProjectPage() {
@@ -83,7 +83,13 @@ export default function SellProjectPage() {
 
     const projectId = result?.data?.projectId;
     alert("등록 완료");
-    router.push(`/project/sell/${projectId}`);
+
+    // 개발 환경에서는 localhost로 리다이렉트
+    if (process.env.NODE_ENV === "development") {
+      window.location.href = `http://localhost:3000/project/sell/${projectId}`;
+    } else {
+      router.push(`/project/sell/${projectId}`);
+    }
   };
 
   return (

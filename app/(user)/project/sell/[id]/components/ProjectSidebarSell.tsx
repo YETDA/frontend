@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import type { Project } from "@/types/project/project";
 
-import { GetPurchasedFileUrl, CreatePurchaseInfo } from "@/app/api/project";
+import { GetPurchasedFileUrl, CreatePurchaseInfo } from "@/apis/project";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
