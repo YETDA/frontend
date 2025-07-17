@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 
 // UI / 카드 컴포넌트
@@ -19,12 +18,10 @@ import { useFollow } from "@/app/api/my/useFollow";
 import { useFollowing } from "@/app/api/my/useFollowing";
 import { usePurchase } from "@/app/api/my/usePurchase";
 import { useOrderList } from "@/app/api/my/useOrderList";
-import { useUserStore } from "@/stores/useStore";
 
 // 타입 정의
 import { PurchaseProject } from "@/types/user/purchaseProject";
 import { Order } from "@/types/user/orderList";
-import { useCheckLogin } from "@/app/api/my/useCheckLogin";
 
 interface Tab {
   value: string;
@@ -32,25 +29,8 @@ interface Tab {
 }
 
 export default function MyPage() {
-  useCheckLogin();
-
-  const router = useRouter();
-  const [isAuthLoading, setIsAuthLoading] = useState(true);
-
   const [userData, setUserData] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const isAuthenticated = useUserStore(state => state.user.isAuthenticated);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      const timeout = setTimeout(() => {
-        alert("로그인이 필요합니다.");
-        router.push("/login");
-      }, 300); // 약간의 딜레이
-      return () => clearTimeout(timeout);
-    }
-    setIsAuthLoading(false);
-  }, [isAuthenticated]);
 
   const following = useFollowing();
   const followers = useFollow();
@@ -71,12 +51,6 @@ export default function MyPage() {
       console.error("로그인 필요 또는 인증 실패:", err);
     }
   };
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchUser();
-    }
-  }, [isAuthenticated]);
 
   const tabs: Tab[] = userData
     ? [
