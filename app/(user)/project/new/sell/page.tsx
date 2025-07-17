@@ -4,14 +4,9 @@ import { useRouter } from "next/navigation";
 
 import type { ProductFormData } from "@/types/productFormData";
 
-import { createPurchaseProject } from "@/app/api/project";
-import { useCheckLogin } from "@/app/api/my/useCheckLogin";
-import { useUserStore } from "@/stores/useStore";
 import SellProjectEditor from "./components/SellProjectEditor";
 
 export default function SellProjectPage() {
-  useCheckLogin();
-  const isAuthenticated = useUserStore(state => state.user.isAuthenticated);
   const router = useRouter();
 
   const initialFormData: ProductFormData = {
@@ -21,7 +16,14 @@ export default function SellProjectPage() {
     category: "",
     price: "",
     images: [],
-    options: [{ name: "STANDARD", price: "0", description: "" }],
+    options: [
+      {
+        name: "STANDARD",
+        price: "0",
+        description: "",
+        deliveryMethod: "FILE_UPLOAD",
+      },
+    ],
     creatorName: "",
     creatorBio: "",
     creatorAvatar: "",
@@ -69,9 +71,8 @@ export default function SellProjectPage() {
         form.append("optionFiles", opt.file, opt.file.name);
       }
     });
-    console.log("로그인 확인", isAuthenticated);
 
-    const res = await createPurchaseProject(form, isAuthenticated);
+    const res = await createPurchaseProject(form);
     const result = res.data;
 
     // if (!res.ok) throw new Error(result?.message || "업로드 실패");

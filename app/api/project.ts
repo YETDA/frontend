@@ -1,55 +1,47 @@
-import axios from "axios";
-
 import type { Project } from "@/types/project/project";
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/+$/, "");
+const API_URL = (
+  process.env.NEXT_PUBLIC_API_URL || "https://yetda.kro.kr"
+).replace(/\/+$/, "");
 
-const ACCESS_TOKEN =
-  "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLqsJDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1MjU0MDA4OCwiZXhwIjoxNzUyNTUwODg4fQ.DekyDDwG3sEqVjN0t2g61VUUUwtZdDVidou6A_lrkxg";
-
-export async function createPurchaseProject(
-  formData: FormData,
-  isAuthenticated: boolean,
-) {
-  if (!isAuthenticated) {
-    throw new Error("로그인이 필요합니다.");
-  }
-
-  if (!isAuthenticated) {
-    return;
-  }
-  if (typeof isAuthenticated !== "boolean") return;
-
+export async function createPurchaseProject(formData: FormData) {
   try {
-    const res = await axios.post(
-      `${API_URL}/api/v1/project/purchase`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data", // FormData이므로 명시
-        },
-        withCredentials: true, // fetch의 credentials: "include"와 동일
-      },
-    );
+    const res = await fetch(`${API_URL}/api/v1/project/purchase`, {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    });
 
-    return res.data;
-  } catch (err: any) {
-    console.error("프로젝트 등록 실패:", err.response?.data || err.message);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const data = await res.json();
+    return { data };
+  } catch (err) {
+    console.error("프로젝트 등록 실패:", err);
     throw err;
   }
 }
 
 export async function getSellProjectById(id: string): Promise<Project | null> {
   try {
-    const res = await axios.get(`${API_URL}/api/v1/project/${id}`, {
+    const res = await fetch(`${API_URL}/api/v1/project/${id}`, {
+      method: "GET",
+      credentials: "include", // 쿠키를 포함하여 요청
       headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
       },
     });
 
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const data = await res.json();
     const project: Project = {
-      ...res.data.data,
-      images: res.data.data.contentImageUrls || [],
+      ...data.data,
+      images: data.data.contentImageUrls || [],
     };
 
     return project;
@@ -69,22 +61,26 @@ export const CreatePurchaseInfo = async ({
   email: string;
 }) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/api/v1/order/purchase`,
-      {
+    const response = await fetch(`${API_URL}/api/v1/order/purchase`, {
+      method: "POST",
+      credentials: "include", // 쿠키를 포함하여 요청
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         projectId,
         projectType: "PURCHASE",
         customerEmail: email,
         purchaseOptions: optionIds,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-        },
-      },
-    );
-    return response.data.data;
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.data;
   } catch (error) {
     console.error("Error creating purchase info:", error);
     throw error;
@@ -96,52 +92,52 @@ export const TossPurchaseApi = async (
   orderId: string,
   amount: number,
 ) => {
-  const response = await axios.post(
-    `${API_URL}/api/v1/toss/confirm`,
-    {
+  const response = await fetch(`${API_URL}/api/v1/toss/confirm`, {
+    method: "POST",
+    credentials: "include", // 쿠키를 포함하여 요청
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
       paymentKey,
       orderId,
       amount,
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-      },
-    },
-  );
-  return response.data;
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data;
 };
 
 export const GetPurchasedFileUrl = async (optionId: number) => {
-  const response = await axios.get(
-    `${API_URL}/api/v1/order/purchase/${optionId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-      },
+  const response = await fetch(`${API_URL}/api/v1/order/purchase/${optionId}`, {
+    method: "GET",
+    credentials: "include", // 쿠키를 포함하여 요청
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
-  return response.data.data.fileUrl as string | null;
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.data.fileUrl as string | null;
 };
 export async function updatePurchaseProject(
   projectId: string,
   formData: FormData,
-) {
-  try {
-    const res = await axios.put(
-      `${API_URL}/api/v1/project/purchase/${projectId}`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-        },
-      },
-    );
-    return res;
-  } catch (err) {
-    console.error("프로젝트 수정 실패:", err);
-    throw err;
-  }
+): Promise<Response> {
+  const res = await fetch(`${API_URL}/api/v1/project/purchase/${projectId}`, {
+    method: "PUT",
+    credentials: "include",
+    body: formData,
+  });
+
+  return res; // ✅ fetch의 Response 그대로 넘김
 }
