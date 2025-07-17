@@ -37,6 +37,7 @@ export default function MyPage() {
   const purchaseProjects: PurchaseProject | null | undefined = usePurchase();
 
   const orderList: Order[] | null | undefined = useOrderList();
+
   const fetchUser = async () => {
     try {
       const res = await axios.get(

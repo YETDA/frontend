@@ -1,9 +1,9 @@
 "use client";
-
 import Image from "next/image";
 
 export default function LoginPage() {
-  const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_API_URL || "");
+  // 프론트 로컬로 설정 배포시 배포 서버로 설정해야함
+  const redirectUri = encodeURIComponent("http://localhost:3000");
 
   const handleKakaoLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/kakao?state=${redirectUri}`;
