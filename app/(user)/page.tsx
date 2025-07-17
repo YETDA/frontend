@@ -2,25 +2,14 @@
 
 import Link from "next/link";
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { popularProjectApi } from "@/apis/popular-project/api";
-
 import HomeCarousel from "./components/HomeCarousel";
 import ProjectCard from "./components/ProjectCard";
+import { fetchAccessTokenFromRefresh } from "@/apis/project";
 
 export default function Home() {
-  const searchParams = useSearchParams();
   const router = useRouter();
-
-  useEffect(() => {
-    const token = searchParams.get("token");
-
-    if (token) {
-      // 로그인 유지를 위해 유효시간 설정해뒀습니다!
-      document.cookie = `accessToken=${token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
-      router.replace("/");
-    }
-  }, [searchParams, router]);
 
   const [projects, setProjects] = useState<any[]>([]);
   const [page, setPage] = useState(0);
@@ -28,13 +17,23 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
+  // 리프레쉬토큰 발급
+  useEffect(() => {
+    const tryRefresh = async () => {
+      const storedToken = localStorage.getItem("accessToken");
+      if (!storedToken) {
+        await fetchAccessTokenFromRefresh();
+      }
+    };
+    tryRefresh();
+  }, []);
+
   // const loadMore = useCallback(async () => {
   //   if (!hasMore || isLoading) return;
   //   setIsLoading(true);
 
   //   try {
   //     const data = await popularProjectApi(page, 20);
-  //     console.log("Popular projects:", data);
   //     setProjects(prev => [...prev, ...data.content]);
   //     setPage(prev => prev + 1);
   //     setHasMore(!data.last);
@@ -52,6 +51,7 @@ export default function Home() {
   // useEffect(() => {
   //   const el = loaderRef.current;
   //   if (!el) return;
+
   //   const obs = new IntersectionObserver(
   //     entries => {
   //       if (entries[0].isIntersecting) {
@@ -68,7 +68,6 @@ export default function Home() {
   return (
     <main>
       <HomeCarousel />
-
       <div className="w-full text-lg font-bold p-4">인기 프로젝트</div>
 
       <div className="grid grid-cols-4 gap-10 px-4">

@@ -4,11 +4,47 @@ const API_URL = (
   process.env.NEXT_PUBLIC_API_URL || "https://yetda.kro.kr"
 ).replace(/\/+$/, "");
 
+export async function fetchAccessTokenFromRefresh() {
+  try {
+    const redirectUri = encodeURIComponent("http://localhost:3000");
+    const res = await fetch(`${API_URL}/auth/refresh?state=${redirectUri}`, {
+      method: "POST",
+      credentials: "include",
+    });
+    if (!res.ok) {
+      throw new Error(`발급 실패: ${res.status}`);
+    }
+    const data = await res.json();
+    console.log("accessToken 발급 성공:", data);
+    const accessToken = data.accessToken;
+    console.log("발급된 accessToken:", accessToken);
+    if (accessToken) {
+      localStorage.setItem("accessToken", accessToken);
+    }
+
+    return accessToken;
+  } catch (error) {
+    console.error("accessToken 발급 에러:", error);
+    return null;
+  }
+}
+async function getAccessToken(): Promise<string | null> {
+  const token = localStorage.getItem("accessToken");
+  if (token) return token;
+  return await fetchAccessTokenFromRefresh();
+}
+
 export async function createPurchaseProject(formData: FormData) {
   try {
+    const accessToken = await getAccessToken();
+    if (!accessToken) throw new Error("accessToken 없음");
+
     const res = await fetch(`${API_URL}/api/v1/project/purchase`, {
       method: "POST",
       credentials: "include",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
       body: formData,
     });
 
@@ -26,22 +62,18 @@ export async function createPurchaseProject(formData: FormData) {
 
 export async function getSellProjectById(id: string): Promise<Project | null> {
   try {
-    const url = `${API_URL}/api/v1/project/${id}`;
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-    };
+    const accessToken = await getAccessToken();
+    if (!accessToken) return null;
 
-    if (typeof window !== "undefined") {
-      const accessToken = localStorage.getItem("accessToken");
-      if (accessToken) {
-        headers["Authorization"] = `Bearer ${accessToken}`;
-      }
-    }
+    const url = `${API_URL}/api/v1/project/${id}`;
 
     const res = await fetch(url, {
       method: "GET",
       credentials: "include",
-      headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob24yZ0BleGFtcGxlLmNvbSIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiLqsJDsnKDsoIAiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc1Mjc1NTIwNSwiZXhwIjoxNzUyNzY2MDA1fQ.MLvzrHYd48rVlrC5Zy9IOMVSvtio-9I_knHOvkaQZpQ`,
+      },
     });
 
     if (!res.ok) {
@@ -65,7 +97,7 @@ export async function getSellProjectById(id: string): Promise<Project | null> {
 
     return project;
   } catch (err) {
-    console.error(`💥 프로젝트 ID ${id} 조회 실패:`, err);
+    console.error(`프로젝트 ID ${id} 조회 실패:`, err);
     return null;
   }
 }
@@ -80,11 +112,15 @@ export const CreatePurchaseInfo = async ({
   email: string;
 }) => {
   try {
+    const accessToken = await getAccessToken();
+    if (!accessToken) throw new Error("accessToken 없음");
+
     const response = await fetch(`${API_URL}/api/v1/order/purchase`, {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
         projectId,
@@ -101,7 +137,7 @@ export const CreatePurchaseInfo = async ({
     const data = await response.json();
     return data.data;
   } catch (error) {
-    console.error("Error creating purchase info:", error);
+    console.error("구매 정보 생성 실패:", error);
     throw error;
   }
 };
@@ -111,11 +147,15 @@ export const TossPurchaseApi = async (
   orderId: string,
   amount: number,
 ) => {
+  const accessToken = await getAccessToken();
+  if (!accessToken) throw new Error("accessToken 없음");
+
   const response = await fetch(`${API_URL}/api/v1/toss/confirm`, {
     method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
       paymentKey,
@@ -133,11 +173,15 @@ export const TossPurchaseApi = async (
 };
 
 export const GetPurchasedFileUrl = async (optionId: number) => {
+  const accessToken = await getAccessToken();
+  if (!accessToken) throw new Error("accessToken 없음");
+
   const response = await fetch(`${API_URL}/api/v1/order/purchase/${optionId}`, {
     method: "GET",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 
@@ -153,9 +197,15 @@ export async function updatePurchaseProject(
   projectId: string,
   formData: FormData,
 ): Promise<Response> {
+  const accessToken = await getAccessToken();
+  if (!accessToken) throw new Error("accessToken 없음");
+
   const res = await fetch(`${API_URL}/api/v1/project/purchase/${projectId}`, {
     method: "PUT",
     credentials: "include",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
     body: formData,
   });
 

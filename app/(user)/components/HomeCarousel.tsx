@@ -7,32 +7,41 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function HomeCarousel() {
   const [api, setApi] = useState<CarouselApi>();
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (!api) return;
 
-    const interval = setInterval(() => {
-      api.scrollNext();
-    }, 2000);
+    const startAutoScroll = () => {
+      timerRef.current = setTimeout(() => {
+        api.scrollNext();
+        startAutoScroll();
+      }, 3000);
+    };
 
-    return () => clearInterval(interval);
+    startAutoScroll();
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, [api]);
 
   return (
-    <div className="w-full h-1/3">
+    <div className="w-full h-[400px]">
       <Carousel opts={{ loop: true }} setApi={setApi}>
         <CarouselContent>
-          <CarouselItem className="w-full relative">
+          <CarouselItem className="w-full relative h-[400px]">
             <Image
               src="/images/sample-carousel-1.png"
               width={1280}
               height={400}
-              alt="sample"
+              alt="창작물 소개 이미지 1"
               className="object-cover w-full h-full"
+              priority
             />
             <div className="absolute inset-0 bg-black/40" />
             <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white px-8">
@@ -45,23 +54,20 @@ export default function HomeCarousel() {
             </div>
           </CarouselItem>
 
-          <CarouselItem className="w-full relative">
+          <CarouselItem className="w-full relative h-[400px]">
             <Image
               src="/images/sample-carousel-2.png"
               width={1280}
               height={400}
-              alt="sample"
+              alt="창작물 소개 이미지 2"
               className="object-cover w-full h-full"
             />
             <div className="absolute inset-0 bg-black/40" />
             <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white px-8">
               <h2 className="text-2xl font-bold mb-2">
-                창작물과 개발물에 투자하세요
+                누구나 창작자가 될 수 있습니다
               </h2>
-              <p className="text-sm">
-                누구나 창작자나 개발자가 될 수 있습니다. 당신의 아이디어를
-                실현하세요.
-              </p>
+              <p className="text-sm">당신의 아이디어를 실현해보세요.</p>
             </div>
           </CarouselItem>
         </CarouselContent>
