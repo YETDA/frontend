@@ -34,7 +34,7 @@ export default function ProjectSidebarPanel({ creator }: Props) {
           <div>
             <h3 className="font-semibold">{creator.name}</h3>
             <div className="text-sm text-gray-600">
-              팔로워 {creator.followerCount.toLocaleString()}명
+              팔로워 {(creator.followerCount ?? 0).toLocaleString()}명
             </div>
           </div>
         </div>

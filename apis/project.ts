@@ -26,19 +26,38 @@ export async function createPurchaseProject(formData: FormData) {
 
 export async function getSellProjectById(id: string): Promise<Project | null> {
   try {
-    const res = await fetch(`${API_URL}/api/v1/project/${id}`, {
+    const url = `${API_URL}/api/v1/project/${id}`;
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (typeof window !== "undefined") {
+      const accessToken = localStorage.getItem("accessToken");
+      if (accessToken) {
+        headers["Authorization"] = `Bearer ${accessToken}`;
+      }
+    }
+
+    const res = await fetch(url, {
       method: "GET",
-      credentials: "include", // 쿠키를 포함하여 요청
-      headers: {
-        "Content-Type": "application/json",
-      },
+      credentials: "include",
+      headers,
     });
 
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+      const errorText = await res.text();
+
+      if (res.status === 404) return null;
+      if (res.status === 401) return null;
+      if (res.status === 403) return null;
+
+      throw new Error(
+        `HTTP error! status: ${res.status}, message: ${errorText}`,
+      );
     }
 
     const data = await res.json();
+
     const project: Project = {
       ...data.data,
       images: data.data.contentImageUrls || [],
@@ -46,7 +65,7 @@ export async function getSellProjectById(id: string): Promise<Project | null> {
 
     return project;
   } catch (err) {
-    console.error("프로젝트 조회 실패:", err);
+    console.error(`💥 프로젝트 ID ${id} 조회 실패:`, err);
     return null;
   }
 }
@@ -63,7 +82,7 @@ export const CreatePurchaseInfo = async ({
   try {
     const response = await fetch(`${API_URL}/api/v1/order/purchase`, {
       method: "POST",
-      credentials: "include", // 쿠키를 포함하여 요청
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -94,7 +113,7 @@ export const TossPurchaseApi = async (
 ) => {
   const response = await fetch(`${API_URL}/api/v1/toss/confirm`, {
     method: "POST",
-    credentials: "include", // 쿠키를 포함하여 요청
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -116,7 +135,7 @@ export const TossPurchaseApi = async (
 export const GetPurchasedFileUrl = async (optionId: number) => {
   const response = await fetch(`${API_URL}/api/v1/order/purchase/${optionId}`, {
     method: "GET",
-    credentials: "include", // 쿠키를 포함하여 요청
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -129,6 +148,7 @@ export const GetPurchasedFileUrl = async (optionId: number) => {
   const data = await response.json();
   return data.data.fileUrl as string | null;
 };
+
 export async function updatePurchaseProject(
   projectId: string,
   formData: FormData,
@@ -139,5 +159,5 @@ export async function updatePurchaseProject(
     body: formData,
   });
 
-  return res; // ✅ fetch의 Response 그대로 넘김
+  return res;
 }
