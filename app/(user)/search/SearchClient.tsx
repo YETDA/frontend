@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { searchResultApi } from "@/app/api/search/api";
+import { searchResultApi } from "@/apis/search/api";
 import ProjectCard from "../components/ProjectCard";
 import Link from "next/link";
 
@@ -43,7 +43,12 @@ export default function SearchClient() {
         setTotalCount(res.data.totalElements ?? rawList.length);
       } catch (e: any) {
         console.error("검색 실패:", e);
-        setError(e.message);
+
+        if (e instanceof Error) {
+          setError(e.message);
+        } else {
+          setError("알 수 없는 오류가 발생했습니다.");
+        }
       } finally {
         setLoading(false);
       }
