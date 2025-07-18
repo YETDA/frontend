@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
 export async function checkUserEmail(email: string) {
   try {
     const res = await axios.get(`${API_URL}/api/v1/user/check-email`, {
@@ -53,6 +52,58 @@ export async function sendVerificationResult(
     return res.data;
   } catch (err) {
     console.error("이메일 인증 요청 실패:", err);
+    throw err;
+  }
+}
+
+export async function getUserAccount() {
+  try {
+    const res = await axios.get(`${API_URL}/api/v1/user/mypage/account`, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err) {
+    console.error("이메일 인증 요청 실패:", err);
+    throw err;
+  }
+}
+
+export async function updateUserAccount(bank: string, account: string) {
+  try {
+    const res = await axios.put(
+      `${API_URL}/api/v1/user/mypage/account`,
+      { bank, account },
+      {
+        withCredentials: true,
+      },
+    );
+    return res.data;
+  } catch (err) {
+    console.error("이메일 인증 요청 실패:", err);
+    throw err;
+  }
+}
+
+export async function deleteUserAccount() {
+  try {
+    const res = await axios.delete(`${API_URL}/api/v1/user/mypage/account`, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err) {
+    console.error("이메일 인증 요청 실패:", err);
+    throw err;
+  }
+}
+
+export async function logout() {
+  try {
+    const res = await axios.post(`${API_URL}/api/v1/user/logout`, null, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err) {
+    console.error("로그아웃 요청 실패:", err);
     throw err;
   }
 }
