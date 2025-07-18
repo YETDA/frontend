@@ -107,3 +107,31 @@ export async function logout() {
     throw err;
   }
 }
+
+export async function createUserFollow(followingId: number) {
+  try {
+    const res = await axios.post(
+      `${API_URL}/api/v1/follow/${followingId}`,
+      null,
+      {
+        withCredentials: true,
+      },
+    );
+    return res.data;
+  } catch (err) {
+    console.error("팔로우 요청 실패:", err);
+    throw err;
+  }
+}
+
+export async function deleteUserFollow(followingId: number) {
+  try {
+    const res = await axios.delete(`${API_URL}/api/v1/follow/${followingId}`, {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err) {
+    console.error("언팔로우 요청 실패:", err);
+    throw err;
+  }
+}
