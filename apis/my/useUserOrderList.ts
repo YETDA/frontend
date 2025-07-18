@@ -13,7 +13,7 @@ export function useUserOrderList() {
           },
         );
 
-        setUserOrderData(res.data);
+        setUserOrderData(res.data.data);
       } catch (err) {
         console.error("로그인 필요 또는 인증 실패:", err);
       }
