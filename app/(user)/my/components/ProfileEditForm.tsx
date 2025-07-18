@@ -126,7 +126,6 @@ export function ProfileEditForm({
         throw new Error("프로필 수정 실패");
       }
 
-      const result = await response;
       onSubmitSuccess();
       onProfileClick(false);
     } catch (error) {
