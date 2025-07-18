@@ -4,6 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/MyTextarea";
 import axios from "axios";
+import {
+  checkUserEmail,
+  sendVerificationEmail,
+  sendVerificationResult,
+} from "@/apis/my/ProfileApi";
 
 interface ProfileFormProps {
   name: string;
@@ -26,12 +31,62 @@ export function ProfileEditForm({
   const [previewImage, setPreviewImage] = useState<string>(user.image);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
+  const [showVerificationInput, setShowVerificationInput] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setPreviewImage(URL.createObjectURL(file));
     setImageFile(file);
+  };
+
+  const handleEmailCheck = async () => {
+    try {
+      const email = value.email;
+      if (!email) {
+        alert("이메일을 입력해주세요.");
+        return;
+      }
+
+      const result = await checkUserEmail(email);
+      console.log("이메일 체크", result);
+      if (result === 409) {
+        alert("사용 중인 이메일입니다.");
+        setShowVerificationInput(false); // 기존에 열린 인증창 닫기
+        return;
+      }
+
+      if (result.statusCode === 200) {
+        setShowVerificationInput(true);
+        console.log("인증메일 이메일 확인: ", email);
+        sendVerificationEmail(email);
+        alert("인증 메일을 보냈습니다. 이메일을 확인해주세요.");
+        return;
+      } else {
+        setShowVerificationInput(false);
+        alert("사용 가능한 이메일입니다.");
+      }
+    } catch (error) {
+      alert("이메일 인증 요청에 실패했습니다.");
+    }
+  };
+
+  const handleVerifyCode = async () => {
+    try {
+      const result = await sendVerificationResult(
+        value.email!,
+        verificationCode,
+      );
+      if (result.statusCode === 200) {
+        alert("이메일 인증에 성공했습니다!");
+      } else {
+        alert("인증 코드가 올바르지 않습니다.");
+      }
+    } catch (error) {
+      alert("이메일 인증에 실패했습니다.");
+    }
   };
 
   const handleSubmit = async () => {
@@ -134,6 +189,25 @@ export function ProfileEditForm({
                   onChange={e => setValue({ ...value, email: e.target.value })}
                   className="ml-2"
                 />
+                <Button onClick={handleEmailCheck}>인증</Button>
+
+                {showVerificationInput && (
+                  <>
+                    <Input
+                      value={verificationCode}
+                      onChange={e => setVerificationCode(e.target.value)}
+                      placeholder="인증 코드"
+                      className="ml-2 w-[150px]"
+                    />
+                    <Button
+                      onClick={handleVerifyCode}
+                      className="ml-1"
+                      variant="outline"
+                    >
+                      확인
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
