@@ -2,6 +2,7 @@ import { Mail } from "lucide-react";
 import Image from "next/image";
 
 import { useFollowCount } from "@/apis/my/useFollowCount";
+import { useUserOrderList } from "@/apis/my/useUserOrderList";
 import { Button } from "@/components/ui/button";
 
 import { GithubBadge } from "./GithubBadge";
@@ -24,6 +25,7 @@ interface ProfileProps {
 }
 export function Profile({ user, onEditClick, purchaseProject }: ProfileProps) {
   const followData = useFollowCount();
+  const userOrderList = useUserOrderList();
 
   return (
     <div className="flex flex-row items-center justify-between pt-[20px] pd-[20px]">
@@ -78,8 +80,11 @@ export function Profile({ user, onEditClick, purchaseProject }: ProfileProps) {
             </div>
 
             <div className="grid grid-rows-2">
-              <p className="text-[#868e96] text-sm">후원수</p>
-              <p className="font-bold">0</p>
+              <p className="text-[#868e96] text-sm">프로젝트 수</p>
+              {/*아직 후원 관련 api 없으므로 프로젝트 수로 대체*/}
+              <p className="font-bold">
+                {userOrderList?.allProjectCount ?? "0"}
+              </p>
             </div>
           </div>
         </div>
