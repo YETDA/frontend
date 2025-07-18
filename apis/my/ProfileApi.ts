@@ -32,7 +32,7 @@ export async function sendVerificationEmail(email: string) {
     );
     return res.data;
   } catch (err) {
-    console.error("이메일 인증 요청 실패:", err);
+    console.error("이메일 인증 메일 요청 실패:", err);
     throw err;
   }
 }
@@ -51,7 +51,7 @@ export async function sendVerificationResult(
     });
     return res.data;
   } catch (err) {
-    console.error("이메일 인증 요청 실패:", err);
+    console.error("이메일 인증 코드 비교 실패:", err);
     throw err;
   }
 }
@@ -63,7 +63,7 @@ export async function getUserAccount() {
     });
     return res.data;
   } catch (err) {
-    console.error("이메일 인증 요청 실패:", err);
+    console.error("계좌 정보 요청 실패:", err);
     throw err;
   }
 }
@@ -79,7 +79,7 @@ export async function updateUserAccount(bank: string, account: string) {
     );
     return res.data;
   } catch (err) {
-    console.error("이메일 인증 요청 실패:", err);
+    console.error("계좌 수정 요청 실패:", err);
     throw err;
   }
 }
@@ -91,7 +91,7 @@ export async function deleteUserAccount() {
     });
     return res.data;
   } catch (err) {
-    console.error("이메일 인증 요청 실패:", err);
+    console.error("계좌 삭제 요청 실패:", err);
     throw err;
   }
 }
