@@ -59,24 +59,13 @@ export default function EditProjectPage({
       const form = new FormData();
 
       const requestDto = {
+        projectType: "PURCHASE",
         title: formData.title,
         introduce: formData.subtitle,
         content: formData.description,
-        field: formData.category,
-        purchaseDetail: {
-          purchaseOptionList: formData.options.map(option => ({
-            providingMethod: "DOWNLOAD",
-            title: option.name,
-            content: option.description,
-            price: Number(option.price),
-            optionStatus: "AVAILABLE",
-            fileIdentifier: option.file?.name ?? "",
-            originalFileName: option.file?.name ?? "",
-            fileType: option.file?.type ?? "application/octet-stream",
-            fileSize: option.file?.size ?? 0,
-            fileUrl: "string",
-          })),
-        },
+        gitAddress: "https://github.com/example/portfolio-template",
+        purchaseCategoryId: 1,
+        averageDeliveryTime: "즉시 다운로드 가능",
       };
 
       form.append("requestDto", JSON.stringify(requestDto));
@@ -84,12 +73,6 @@ export default function EditProjectPage({
       formData.images.forEach(image => {
         if (image.file) {
           form.append("contentImage", image.file, image.file.name);
-        }
-      });
-
-      formData.options.forEach(opt => {
-        if (opt.file) {
-          form.append("optionFiles", opt.file, opt.file.name);
         }
       });
 

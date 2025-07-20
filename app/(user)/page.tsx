@@ -28,42 +28,42 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  // const loadMore = useCallback(async () => {
-  //   if (!hasMore || isLoading) return;
-  //   setIsLoading(true);
+  const loadMore = useCallback(async () => {
+    if (!hasMore || isLoading) return;
+    setIsLoading(true);
 
-  //   try {
-  //     const data = await popularProjectApi(page, 20);
-  //     console.log("Popular projects:", data);
-  //     setProjects(prev => [...prev, ...data.content]);
-  //     setPage(prev => prev + 1);
-  //     setHasMore(!data.last);
-  //   } catch (err) {
-  //     console.error("인기 프로젝트 조회 실패:", err);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // }, [page, hasMore, isLoading]);
+    try {
+      const data = await popularProjectApi(page, 20);
+      console.log("Popular projects:", data);
+      setProjects(prev => [...prev, ...data.content]);
+      setPage(prev => prev + 1);
+      setHasMore(!data.last);
+    } catch (err) {
+      console.error("인기 프로젝트 조회 실패:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [page, hasMore, isLoading]);
 
-  // useEffect(() => {
-  //   loadMore();
-  // }, []);
+  useEffect(() => {
+    loadMore();
+  }, []);
 
-  // useEffect(() => {
-  //   const el = loaderRef.current;
-  //   if (!el) return;
-  //   const obs = new IntersectionObserver(
-  //     entries => {
-  //       if (entries[0].isIntersecting) {
-  //         loadMore();
-  //       }
-  //     },
-  //     { root: null, rootMargin: "0px", threshold: 0.1 },
-  //   );
+  useEffect(() => {
+    const el = loaderRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { root: null, rootMargin: "0px", threshold: 0.1 },
+    );
 
-  //   obs.observe(el);
-  //   return () => obs.disconnect();
-  // }, [loadMore]);
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [loadMore]);
 
   return (
     <main>
