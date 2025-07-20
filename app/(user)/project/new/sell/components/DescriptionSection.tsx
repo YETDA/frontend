@@ -1,5 +1,3 @@
-// app/project/new/sell/components/DescriptionSection.tsx
-
 "use client";
 
 import type { ProductFormData } from "@/types/productFormData";

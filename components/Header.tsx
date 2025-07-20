@@ -7,7 +7,13 @@ import { Bell, Heart } from "lucide-react";
 import axios from "axios";
 
 export default function Header() {
-  const [userData, setUserData] = useState<any>(null);
+  interface UserData {
+    image: string;
+    name?: string;
+    nickname?: string;
+  }
+
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   const fetchUser = async () => {
     try {
@@ -55,14 +61,16 @@ export default function Header() {
           <div className="flex items-center gap-2">
             <Link href="/my">
               <Image
-                src={userData.profileImageUrl ?? "/images/sample-profile.png"}
+                src={userData.image}
                 width={32}
                 height={32}
                 alt="profile"
                 className="rounded-full object-cover cursor-pointer"
               />
             </Link>
-            <span className="font-medium">{userData.nickname}</span>
+            <span className="font-medium">
+              {userData.name ?? userData.nickname ?? "이름 없음"}
+            </span>
           </div>
         </div>
       ) : (

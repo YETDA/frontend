@@ -3,12 +3,12 @@
 import { useRouter } from "next/navigation";
 
 import type { ProductFormData } from "@/types/productFormData";
-
 import { createPurchaseProject } from "@/apis/project";
-
 import SellProjectEditor from "./components/SellProjectEditor";
+
 export default function SellProjectPage() {
   const router = useRouter();
+
   const initialFormData: ProductFormData = {
     title: "",
     subtitle: "",
@@ -30,6 +30,48 @@ export default function SellProjectPage() {
   };
 
   const handleSubmit = async (formData: ProductFormData) => {
+    if (!formData.title.trim()) {
+      alert("프로젝트 제목을 입력해주세요.");
+      return;
+    }
+    if (!formData.subtitle.trim()) {
+      alert("부제목을 입력해주세요.");
+      return;
+    }
+    if (!formData.description.trim()) {
+      alert("프로젝트 설명을 입력해주세요.");
+      return;
+    }
+    if (!formData.category.trim()) {
+      alert("카테고리를 입력해주세요.");
+      return;
+    }
+
+    if (!/^[0-9]+$/.test(formData.price)) {
+      alert("가격은 숫자만 입력해주세요.");
+      return;
+    }
+
+    if (formData.options.length === 0) {
+      alert("옵션을 하나 이상 추가해주세요.");
+      return;
+    }
+    for (let i = 0; i < formData.options.length; i++) {
+      const opt = formData.options[i];
+      if (!opt.name.trim()) {
+        alert(`옵션 ${i + 1}의 제목을 입력해주세요.`);
+        return;
+      }
+      if (!/^[0-9]+$/.test(opt.price) || Number(opt.price) <= 0) {
+        alert(`옵션 ${i + 1}의 가격은 1원 이상의 숫자만 입력해주세요.`);
+        return;
+      }
+      if (!opt.description.trim()) {
+        alert(`옵션 ${i + 1}의 설명을 입력해주세요.`);
+        return;
+      }
+    }
+
     const form = new FormData();
 
     const requestDto = {
@@ -61,7 +103,7 @@ export default function SellProjectPage() {
     form.append("requestDto", JSON.stringify(requestDto));
 
     formData.images.forEach(image => {
-      if (image?.file) {
+      if (image.file) {
         form.append("contentImage", image.file, image.file.name);
       }
     });
@@ -72,14 +114,15 @@ export default function SellProjectPage() {
       }
     });
 
-    const res = await createPurchaseProject(form);
-    const result = res.data;
-
-    // if (!res.ok) throw new Error(result?.message || "업로드 실패");
-
-    const projectId = result?.data?.projectId;
-    alert("등록 완료");
-    router.push(`/project/sell/${projectId}`);
+    try {
+      const res = await createPurchaseProject(form);
+      const projectId = res.data?.data?.projectId;
+      alert("등록 완료");
+      router.push(`/project/sell/${projectId}`);
+    } catch (err) {
+      console.error("프로젝트 등록 실패:", err);
+      alert("프로젝트 등록 중 오류가 발생했습니다.");
+    }
   };
 
   return (
