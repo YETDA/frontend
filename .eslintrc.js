@@ -1,8 +1,3 @@
-/**
- * Next.js 14 이상 + ESLint 호환 ESLint 설정
- * - JSON → JS 변환 (주석 가능)
- */
-
 module.exports = {
   env: {
     browser: true,
@@ -40,24 +35,16 @@ module.exports = {
       },
     ],
 
+    // any 사용 허용
+    "@typescript-eslint/no-explicit-any": "off",
+
     "no-unused-vars": "off",
 
-    /**
-     * 최신 perfectionist는 옵션 없이 error만 설정 가능
-     * 커스텀 그룹 옵션 제거!
-     */
-    // "perfectionist/sort-imports": "error",
+    "perfectionist/sort-imports": "off",
 
     "import/no-unresolved": "error",
     "import/no-cycle": "error",
 
-    // "@typescript-eslint/consistent-type-imports": [
-    //   "error",
-    //   {
-    //     fixStyle: "separate-type-imports",
-    //   },
-    // ],
-    "perfectionist/sort-imports": "off",
     "@typescript-eslint/consistent-type-imports": "off",
     "@typescript-eslint/no-implied-eval": "error",
   },
