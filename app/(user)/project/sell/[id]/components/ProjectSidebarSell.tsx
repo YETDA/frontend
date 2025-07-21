@@ -16,8 +16,10 @@ interface Props {
 export default function ProjectSidebarSell({ project }: Props) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const selectedOption = project.purchaseOptions?.[selectedIndex];
+
   const [error, setError] = useState("");
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [isPurchased, setIsPurchased] = useState(false);
 
   const totalPrice = selectedOption?.price.toLocaleString() ?? "0";
 
@@ -29,8 +31,10 @@ export default function ProjectSidebarSell({ project }: Props) {
             selectedOption.purchaseOptionId,
           );
           setDownloadUrl(fileUrl);
+          setIsPurchased(true);
         } catch {
           setDownloadUrl(null);
+          setIsPurchased(false);
         }
       }
     };
@@ -92,9 +96,9 @@ export default function ProjectSidebarSell({ project }: Props) {
           </div>
         )}
 
-        {downloadUrl ? (
+        {isPurchased ? (
           <a
-            href={downloadUrl}
+            href={downloadUrl!}
             download
             target="_blank"
             rel="noopener noreferrer"

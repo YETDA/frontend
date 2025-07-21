@@ -6,14 +6,23 @@ const API_URL = (
 
 export async function createPurchaseProject(formData: FormData) {
   try {
+    const token = localStorage.getItem("accessToken");
+
     const res = await fetch(`${API_URL}/api/v1/project/purchase`, {
       method: "POST",
       credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token ?? ""}`,
+        Accept: "application/json",
+      },
       body: formData,
     });
 
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+      const errorText = await res.text();
+      throw new Error(
+        `HTTP error! status: ${res.status}, message: ${errorText}`,
+      );
     }
 
     const data = await res.json();
@@ -65,7 +74,7 @@ export async function getSellProjectById(id: string): Promise<Project | null> {
 
     return project;
   } catch (err) {
-    console.error(`💥 프로젝트 ID ${id} 조회 실패:`, err);
+    console.error(`프로젝트 ID ${id} 조회 실패:`, err);
     return null;
   }
 }
@@ -153,11 +162,28 @@ export async function updatePurchaseProject(
   projectId: string,
   formData: FormData,
 ): Promise<Response> {
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+  };
+
+  if (typeof window !== "undefined") {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      headers["Authorization"] = `Bearer ${accessToken}`;
+    }
+  }
+
   const res = await fetch(`${API_URL}/api/v1/project/purchase/${projectId}`, {
     method: "PUT",
     credentials: "include",
+    headers,
     body: formData,
   });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`HTTP error! status: ${res.status}, message: ${errorText}`);
+  }
 
   return res;
 }

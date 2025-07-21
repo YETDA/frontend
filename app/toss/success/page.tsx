@@ -45,6 +45,7 @@ function SuccessContent() {
       <div className="box_section" style={{ width: "600px" }}>
         <Image
           src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png"
+          height={100}
           width={100}
           alt="결제 완료"
         />
