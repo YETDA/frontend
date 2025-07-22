@@ -1,7 +1,9 @@
 "use client";
 
-import { Share2, User, Heart, Star } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Link from "next/link";
+import { Share2, User, Heart, Star } from "lucide-react";
 
 import type { Project } from "@/types/project/project";
 
@@ -14,19 +16,44 @@ interface Props {
 }
 
 export default function ProjectHeader({ project }: Props) {
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/mypage`, {
+        withCredentials: true,
+      })
+      .then(res => {
+        setCurrentUserId(res.data.data.user_id);
+      })
+      .catch(() => {
+        setCurrentUserId(null);
+      });
+  }, []);
+
+  const ownerId =
+    (project as any).userId ??
+    (project as any).user_id ??
+    (project as any).hostId ??
+    null;
+
+  const isOwner =
+    currentUserId !== null && ownerId !== null && currentUserId === ownerId;
+
   return (
     <div className="mb-8">
       <div className="mb-4 flex items-center justify-between">
         <Badge variant="outline">{project.purchaseCategoryName}</Badge>
-        <Link href={`/project/new/sell/edit/${project.projectId}`}>
-          <Button variant="outline" size="sm">
-            수정하기
-          </Button>
-        </Link>
+        {isOwner && (
+          <Link href={`/project/new/sell/edit/${project.projectId}`}>
+            <Button variant="outline" size="sm">
+              수정하기
+            </Button>
+          </Link>
+        )}
       </div>
 
       <h1 className="text-3xl font-bold mb-4">{project.title}</h1>
-
       <p className="text-xl text-gray-600 mb-6">{project.introduce}</p>
 
       <div className="flex justify-between items-end mb-6">
@@ -41,7 +68,7 @@ export default function ProjectHeader({ project }: Props) {
             </AvatarFallback>
           </Avatar>
           <div>
-            <h3 className="font-semibold">{project.name ?? "없어요"}</h3>
+            <h3 className="font-semibold">{project.name ?? "이름 없음"}</h3>
             <div className="flex items-center space-x-4 text-sm text-gray-600">
               <span>프로젝트 {project.projectCount ?? 0}개</span>
               <span>
@@ -51,7 +78,7 @@ export default function ProjectHeader({ project }: Props) {
           </div>
         </div>
 
-        {project.stats && (
+        {/* {project.stats && (
           <div className="flex gap-6 text-gray-700 text-sm font-medium relative -top-1.5">
             <div className="flex items-center">
               <Heart className="w-4 h-4 mr-1 text-red-500" />
@@ -66,7 +93,7 @@ export default function ProjectHeader({ project }: Props) {
               <span>4.8</span>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
