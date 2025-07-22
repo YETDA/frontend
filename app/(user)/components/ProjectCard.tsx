@@ -1,5 +1,6 @@
-import Image from "next/image";
+"use client";
 
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -17,11 +18,11 @@ export default function ProjectCard({
   sellingAmount,
 }: ProjectCardProps) {
   return (
-    <Card className="w-full max-w-[280px] max-h-[330px] rounded-xl overflow-hidden flex flex-col">
-      <CardHeader>
-        <div className="relative w-full h-30">
+    <Card className="w-full max-w-[280px] rounded-xl overflow-hidden flex flex-col shadow hover:shadow-md transition">
+      <CardHeader className="p-0">
+        <div className="relative w-full aspect-video bg-gray-100">
           <Image
-            src={`${thumbnail}`}
+            src={thumbnail}
             alt="Project Image"
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -30,13 +31,15 @@ export default function ProjectCard({
         </div>
       </CardHeader>
 
-      <CardContent className="flex flex-col justify-between gap-2.5 p-4">
-        <div className="text-xs color-[#868E96]">{hostName}</div>
-        <CardTitle className="text-md truncate w-full">{title}</CardTitle>
-        <div className="text-title">{sellingAmount}회 판매</div>
+      <CardContent className="flex flex-col justify-between flex-1 p-4 gap-2">
+        <div className="text-xs text-gray-500">{hostName}</div>
+        <CardTitle className="text-md truncate">{title}</CardTitle>
+        <div className="text-sm text-blue-600 font-medium">
+          {sellingAmount.toLocaleString()}회 판매
+        </div>
         <Badge
           variant="outline"
-          className="py-1 px-2 w-fit h-fit bg-gradient-to-r from-[#1F9EFF] to-[#0064FF] text-white border-none"
+          className="self-start py-1 px-2 bg-gradient-to-r from-blue-400 to-blue-600 text-white border-none"
         >
           좋은 창작자
         </Badge>

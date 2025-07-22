@@ -6,8 +6,6 @@ import { useState } from "react";
 
 import type { ProductFormData } from "@/types/productFormData";
 
-import { Button } from "@/components/ui/button";
-
 import DescriptionSection from "./DescriptionSection";
 import ImageUploadSection from "./ImageUploadSection";
 import OptionListSection from "./OptionListSection";
@@ -41,42 +39,42 @@ export default function SellProjectEditor({
   };
 
   return (
-    <div className="min-h-screen">
-      <header className="bg-white border-b sticky top-0 z-50">
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 max-w-full">
-            <Link href="/project/new" className="flex items-center space-x-2">
-              <ArrowLeft className="w-5 h-5" />
-              <span className="text-lg font-semibold">판매 프로젝트</span>
-            </Link>
-            <div className="flex items-center space-x-4">
-              <Button
-                className="bg-sky-500 hover:bg-sky-600"
-                onClick={handleSubmit}
-              >
-                {submitButtonLabel}
-              </Button>
-            </div>
-          </div>
-        </div>
+    <div
+      className="
+        min-h-screen 
+        bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200
+        w-full mx-auto px-6 py-12
+      "
+    >
+      <header className="flex items-center justify-between mb-8">
+        <Link
+          href="/project/new"
+          className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span className="text-lg font-semibold">판매 프로젝트</span>
+        </Link>
+        <button
+          onClick={handleSubmit}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          {submitButtonLabel}
+        </button>
       </header>
 
-      <div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-2">
-            <div>
-              <p className="text-gray-600 text-center">
-                오른쪽에서 실시간 미리보기를 확인하세요
-              </p>
-            </div>
+      <p className="text-center text-gray-600 mb-8">
+        오른쪽에서 실시간 미리보기를 확인하세요
+      </p>
 
-            <ProductFormSection formData={formData} onUpdate={updateFormData} />
-            <ImageUploadSection formData={formData} onUpdate={updateFormData} />
-            <DescriptionSection formData={formData} onUpdate={updateFormData} />
-            <OptionListSection formData={formData} onUpdate={updateFormData} />
-          </div>
-          <ProductPreviewPanel formData={formData} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="space-y-6">
+          <ProductFormSection formData={formData} onUpdate={updateFormData} />
+          <ImageUploadSection formData={formData} onUpdate={updateFormData} />
+          <DescriptionSection formData={formData} onUpdate={updateFormData} />
+          <OptionListSection formData={formData} onUpdate={updateFormData} />
         </div>
+
+        <ProductPreviewPanel formData={formData} />
       </div>
     </div>
   );
