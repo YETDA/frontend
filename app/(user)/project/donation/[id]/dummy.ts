@@ -1,0 +1,48 @@
+export const dummyProject = {
+  id: "1",
+  title: "AI 기반 개인 비서 앱",
+  description:
+    "일상 생활을 더욱 편리하게 만들어주는 AI 개인 비서입니다. 음성 인식, 자연어 처리, 머신러닝 기술을 활용하여 사용자의 일정 관리, 정보 검색, 알림 서비스 등을 제공합니다.",
+  category: "app-service",
+  mainImage: "/placeholder.jpeg",
+  images: ["/placeholder.jpeg", "/placeholder.jpeg", "/placeholder.jpeg"],
+  creator: {
+    id: "1",
+    name: "김개발",
+    email: "dev@example.com",
+    role: "creator",
+    followers: 120,
+    following: 45,
+    likes: 89,
+  },
+  currentFunding: 3200000,
+  fundingPeriod: {
+    start: new Date("2024-01-01"),
+    end: new Date("2024-03-31"),
+  },
+  rewards: [
+    {
+      id: "1",
+      name: "얼리버드 리워드",
+      description: "앱 출시 후 1개월 이내에 다운로드 가능한 베타 버전",
+      amount: 500,
+      deliveryMethod: "앱스토어 링크",
+      deliveryDate: new Date("2024-04-01"),
+      maxQuantity: 100,
+      currentQuantity: 45,
+    },
+    {
+      id: "2",
+      name: "프리미엄 리워드",
+      description: "베타 버전 + 추가 기능 3개월 무료 이용권",
+      amount: 500,
+      deliveryMethod: "앱스토어 링크 + 이메일",
+      deliveryDate: new Date("2024-04-01"),
+      maxQuantity: 50,
+      currentQuantity: 23,
+    },
+  ],
+  status: "active",
+  createdAt: new Date("2024-01-01"),
+  updatedAt: new Date("2024-01-15"),
+};
