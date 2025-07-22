@@ -17,7 +17,7 @@ export default function ProjectCard({
   sellingAmount,
 }: ProjectCardProps) {
   return (
-    <Card className="w-full max-w-[280px] max-h-[330px] rounded-xl overflow-hidden flex flex-col">
+    <Card className="w-full max-w-[280px] max-h-[330px] rounded-xl overflow-hidden flex flex-col border border-gray shadow-sm">
       <CardHeader>
         <div className="relative w-full h-30">
           <Image
