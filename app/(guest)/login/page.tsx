@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 export default function LoginPage() {
-  const redirectUri = encodeURIComponent("http://localhost:3000");
+  const redirectUri = encodeURIComponent(process.env.NEXT_PUBLIC_API_URL || "");
 
   const handleKakaoLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/kakao?state=${redirectUri}`;

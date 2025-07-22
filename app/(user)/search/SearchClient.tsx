@@ -39,11 +39,9 @@ export default function SearchClient() {
         const res = await searchResultApi(keyword);
         const rawList: RawProject[] = res.data.content || [];
 
-
         setProjects(rawList);
         setTotalCount(res.data.totalElements ?? rawList.length);
       } catch (e: any) {
-
         console.error("검색 실패:", e);
 
         if (e instanceof Error) {
