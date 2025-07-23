@@ -1,18 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-export default function Page() {
+interface ProjectTypeSelectorProps {
+  onSelect: (type: "donation" | "sell") => void;
+}
+
+export default function StartSection({ onSelect }: ProjectTypeSelectorProps) {
   const [selected, setSelected] = useState<"donation" | "sell" | null>(null);
 
   const handleClick = (type: "donation" | "sell") => {
     setSelected(type);
+    onSelect(type);
   };
 
   const baseCard =
-    "group relative overflow-hidden rounded-3xl border-2 p-8 transition-transform duration-500 bg-transparent";
+    "group relative overflow-hidden rounded-3xl bg-white/80 backdrop-blur-sm border-2 p-8 transition-transform duration-500";
   const donationClasses =
     selected === "donation"
       ? "border-pink-500 scale-105 shadow-xl"
@@ -23,8 +28,8 @@ export default function Page() {
       : "border-purple-200 hover:border-purple-300 hover:-translate-y-2 hover:scale-105 shadow-lg";
 
   return (
-    <main className="py-20 full-bleed">
-      <div className="w-full mx-auto px-6 sm:px-8 lg:px-12">
+    <section className="py-20">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="text-center mb-16">
           <div className="inline-flex items-center space-x-2 mb-4">
             <span className="text-4xl">✨</span>
@@ -41,7 +46,6 @@ export default function Page() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* 후원 카드 */}
           <div
             className={`${baseCard} ${donationClasses}`}
             onClick={() => handleClick("donation")}
@@ -80,7 +84,6 @@ export default function Page() {
             </div>
           </div>
 
-          {/* 판매 카드 */}
           <div
             className={`${baseCard} ${sellClasses}`}
             onClick={() => handleClick("sell")}
@@ -120,6 +123,6 @@ export default function Page() {
           </div>
         </div>
       </div>
-    </main>
+    </section>
   );
 }

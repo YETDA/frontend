@@ -6,7 +6,7 @@ interface NotificationData {
   type: string;
   message: string;
   timestamp: string;
-  data?: any; // 원본 데이터 보존을 위한 선택적 속성
+  data?: any;
 }
 import { useNotification } from "../(user)/alram/NotificationContext";
 
@@ -21,6 +21,7 @@ export const SSEProvider = ({ children }: { children: React.ReactNode }) => {
         withCredentials: true,
       },
     );
+    console.log(evtSource);
 
     evtSource.onopen = () => {
       console.log("SSE 연결 성공");

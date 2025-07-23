@@ -39,13 +39,7 @@ export default function SellProjectEditor({
   };
 
   return (
-    <div
-      className="
-        min-h-screen 
-        bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200
-        w-full mx-auto px-6 py-12
-      "
-    >
+    <div className="min-h-screen max-w-[1168px] mx-auto px-6 py-12">
       <header className="flex items-center justify-between mb-8">
         <Link
           href="/project/new"

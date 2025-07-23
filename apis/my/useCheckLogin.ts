@@ -32,6 +32,7 @@ export function useCheckLogin() {
         });
         useUserStore.getState().setPersistMode("post-login");
         setUserData(user);
+        console.log("유저 데이터", user);
       } catch (err: any) {
         if (err.response?.status === 401) {
           console.warn("유저 상태 초기화");

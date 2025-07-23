@@ -1,7 +1,7 @@
 import "@/app/globals.css";
-import Header from "@/components/Header";
-// import SubHeader from "@/components/SubHeader";
-import Footer from "@/components/Footer";
+import { SSEProvider } from "@/app/providers/SSEProvider";
+import { NotificationProvider } from "@/app/(user)/alram/NotificationContext";
+import NotificationContainerWrapper from "@/app/(user)/alram/NotificationContainerWrapper";
 
 export default function RootLayout({
   children,
@@ -11,9 +11,12 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <main>
+          <NotificationProvider>
+            <NotificationContainerWrapper />
+            <SSEProvider>{children}</SSEProvider>
+          </NotificationProvider>
+        </main>
       </body>
     </html>
   );

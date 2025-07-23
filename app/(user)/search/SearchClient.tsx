@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { searchResultApi } from "@/apis/search/api";
-import ProjectCard from "../components/ProjectCard";
+import ProjectCard from "../components/PundingCard";
 import Link from "next/link";
 
 interface RawProject {
