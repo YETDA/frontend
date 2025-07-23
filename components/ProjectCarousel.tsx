@@ -118,9 +118,17 @@ export function ProjectCarousel() {
             <div className="text-xs text-gray-500">총 후원액</div>
           </div>
         )}
-        <button className="mt-auto w-full flex items-center justify-center space-x-1 bg-gradient-to-r from-[#00A4FF] to-[#0064FF] hover:from-[#0064FF] hover:to-[#00A4FF] text-white text-sm py-2 rounded-full transition">
+        <button
+          className={`mt-auto w-full flex items-center justify-center space-x-1
+      bg-gradient-to-r ${
+        p.projectType === "DONATION"
+          ? "from-[#E9529B] to-[#E9529B]/80 hover:from-[#E9529B]/80 hover:to-[#E9529B]"
+          : "from-[#B068F6] to-[#B068F6]/80 hover:from-[#B068F6]/80 hover:to-[#B068F6]"
+      }
+      text-white text-sm py-2 rounded-full transition`}
+        >
           <Coins className="w-4 h-4" />
-          <span>후원하기</span>
+          <span>{p.projectType === "DONATION" ? "후원하기" : "구매하기"}</span>
         </button>
       </div>
     </div>
