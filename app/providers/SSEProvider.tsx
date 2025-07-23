@@ -8,7 +8,7 @@ interface NotificationData {
   timestamp: string;
   data?: any; // 원본 데이터 보존을 위한 선택적 속성
 }
-import { useNotification } from "../(user)/alram/notificationContext";
+import { useNotification } from "../(user)/alram/NotificationContext";
 
 export const SSEProvider = ({ children }: { children: React.ReactNode }) => {
   const [lastMessage, setLastMessage] = useState<NotificationData | null>(null);
