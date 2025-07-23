@@ -25,6 +25,8 @@ import {
 } from "./ui/MyTooltip";
 import { useUserOrderList } from "@/apis/my/useUserOrderList";
 import MySettlement from "./ui/MySettlement";
+import { useSettlement } from "@/apis/my/useSettlement";
+import { TotalSettlementCard } from "./TotalSettlement";
 
 type UserType = "creator" | "supporter";
 
@@ -48,24 +50,20 @@ export function Profile({ user, onEditClick }: ProfileProps) {
   const followData = useFollowCount();
   // 사용자가 구매한 프로젝트 리스트 useUserOrderList
   const userOrderList = useUserOrderList();
+  // 사용자가 올린 프로젝트 정산 리스트
+  const userSettlement = useSettlement();
   const creatorTabs = [
     {
       value: "심사 현황",
       icon: <FileText className="h-4 w-4" />,
-      content: <div>심사 현황 내용</div>,
-    },
-    {
-      value: "정산",
-      icon: <DollarSign className="h-4 w-4" />,
       content: (
-        // 정산 내역 리스트 연동 필요
         <div className="flex flex-row justify-center">
-          {userOrderList?.content?.map((project, index) => (
+          {userSettlement?.content?.map((project: any, index: number) => (
             <MySettlement
-              key={`${project.projectId}-${index}`}
+              key={`${index}`}
               project={{
                 id: project.index,
-                title: project.title,
+                title: project.projectTitle,
                 periodStart: project.periodStart,
                 periodEnd: project.periodEnd,
                 payoutAmount: project.payoutAmount,
@@ -73,11 +71,19 @@ export function Profile({ user, onEditClick }: ProfileProps) {
                 totalOrderAmount: project.totalOrderAmount,
                 settlementStatus: project.settlementStatus,
                 contentImageUrls:
-                  project.contentImageUrls?.[0] || "/images/sample-image.jpg",
+                  project.projectImageUrls || "/images/sample-image.jpg",
               }}
             />
           ))}
         </div>
+      ),
+    },
+    {
+      value: "정산",
+      icon: <DollarSign className="h-4 w-4" />,
+      content: (
+        // 21 - 20 총 누적된 정산 내역
+        <TotalSettlementCard />
       ),
     },
     {
@@ -94,7 +100,7 @@ export function Profile({ user, onEditClick }: ProfileProps) {
       // 후원한 프로젝트 api는 아직 없으므로 구매한 프로젝트 api를 활용하여 나타냈습니다.
       content: (
         <div className="flex flex-row justify-center">
-          {userOrderList?.content?.map((project, index) => (
+          {userOrderList?.content?.map((project: any, index: number) => (
             <MyProjectCard
               key={`${project.id}-${index}`}
               project={{
@@ -116,7 +122,7 @@ export function Profile({ user, onEditClick }: ProfileProps) {
       icon: <ShoppingBag className="h-4 w-4" />,
       content: (
         <div className="flex flex-row justify-center">
-          {userOrderList?.content?.map((project, index) => (
+          {userOrderList?.content?.map((project: any, index: number) => (
             <MyProjectCard
               key={`${project.projectId}-${index}`}
               project={{
