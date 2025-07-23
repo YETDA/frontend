@@ -40,7 +40,11 @@ module.exports = {
 
     "no-unused-vars": "off",
 
-    "perfectionist/sort-imports": "off",
+    /**
+     * 최신 perfectionist는 옵션 없이 error만 설정 가능
+     * 커스텀 그룹 옵션 제거!
+     */
+    // "perfectionist/sort-imports": "error",
 
     "import/no-unresolved": "error",
     "import/no-cycle": "error",

@@ -18,7 +18,7 @@ export default function DescriptionSection({ formData, onUpdate }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>상세 설명</CardTitle>
+        <CardTitle>제품 설명</CardTitle>
       </CardHeader>
       <CardContent>
         <Label htmlFor="description">

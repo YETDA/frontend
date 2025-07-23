@@ -1,131 +1,134 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import { ShoppingCart, Download } from "lucide-react";
-import { useEffect, useState } from "react";
-
-import type { Project } from "@/types/project/project";
-
+import type { Project, ProductOption } from "@/types/project/project";
 import { GetPurchasedFileUrl, CreatePurchaseInfo } from "@/apis/project";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 
 interface Props {
   project: Project;
 }
 
+const getDeliveryMethodInfo = (method: string) => {
+  switch (method) {
+    case "DOWNLOAD":
+      return {
+        icon: "💾",
+        name: "즉시 다운로드",
+        description: "구매 즉시 파일 링크를 제공합니다.",
+      };
+    case "EMAIL":
+      return {
+        icon: "📧",
+        name: "이메일 전달",
+        description: "구매 후 등록된 이메일로 파일을 전송합니다.",
+      };
+    default:
+      return { icon: "", name: method, description: "" };
+  }
+};
+
 export default function ProjectSidebarSell({ project }: Props) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const selectedOption = project.purchaseOptions?.[selectedIndex];
+  const [optIdx, setOptIdx] = useState(0);
+  const selected = project.purchaseOptions[optIdx] as ProductOption;
 
-  const [error, setError] = useState("");
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [isPurchased, setIsPurchased] = useState(false);
-
-  const totalPrice = selectedOption?.price.toLocaleString() ?? "0";
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchFileUrl = async () => {
-      if (selectedOption?.purchaseOptionId) {
-        try {
-          const fileUrl = await GetPurchasedFileUrl(
-            selectedOption.purchaseOptionId,
-          );
-          setDownloadUrl(fileUrl);
-          setIsPurchased(true);
-        } catch {
-          setDownloadUrl(null);
-          setIsPurchased(false);
-        }
+    async function check() {
+      if (!selected) return;
+      try {
+        const url = await GetPurchasedFileUrl(selected.purchaseOptionId);
+        setDownloadUrl(url);
+        setIsPurchased(true);
+      } catch {
+        setDownloadUrl(null);
+        setIsPurchased(false);
       }
-    };
-
-    fetchFileUrl();
-  }, [selectedOption?.purchaseOptionId]);
+    }
+    check();
+  }, [selected.purchaseOptionId]);
 
   const handlePurchase = async () => {
     try {
-      if (!project.projectId || !selectedOption?.purchaseOptionId) {
-        throw new Error("프로젝트 또는 옵션 ID가 없습니다.");
-      }
-
-      const customerEmail = "test@naver.com";
-
       const { orderId, totalAmount } = await CreatePurchaseInfo({
         projectId: Number(project.projectId),
-        optionIds: [selectedOption.purchaseOptionId],
-        email: customerEmail,
+        optionIds: [selected.purchaseOptionId],
+        email: "test@naver.com",
       });
-
-      const url = `/toss?orderId=${encodeURIComponent(orderId)}&amount=${encodeURIComponent(totalAmount)}`;
-      window.open(url, "TossPayment", "width=600,height=700,left=200,top=100");
-    } catch (err) {
-      console.error(err);
-      setError("결제 실패");
+      const payUrl = `/toss?orderId=${encodeURIComponent(
+        orderId,
+      )}&amount=${encodeURIComponent(totalAmount)}`;
+      window.open(
+        payUrl,
+        "TossPayment",
+        "width=600,height=700,left=200,top=100",
+      );
+    } catch {
+      setError("결제 요청 중 오류가 발생했습니다.");
     }
   };
 
+  const delivery = getDeliveryMethodInfo(selected.providingMethod);
+
   return (
-    <Card className="rounded-2xl shadow-sm border">
-      <CardContent className="space-y-6">
-        {project.purchaseOptions && project.purchaseOptions.length > 0 && (
-          <div className="flex justify-between border-b">
-            {project.purchaseOptions.map((opt, idx) => (
-              <button
-                key={opt.purchaseOptionId}
-                className={`flex-1 text-center py-2 font-medium ${
-                  selectedIndex === idx
-                    ? "text-black border-b-2 border-black"
-                    : "text-gray-400"
-                }`}
-                onClick={() => setSelectedIndex(idx)}
-              >
-                {opt.title}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {selectedOption && (
-          <div className="space-y-3 text-gray-800">
-            <div className="text-2xl font-bold">₩{totalPrice}</div>
-            {selectedOption.content && (
-              <div className="text-sm leading-relaxed whitespace-pre-line font-medium">
-                {selectedOption.content}
-              </div>
-            )}
-          </div>
-        )}
-
-        {isPurchased ? (
-          <a
-            href={downloadUrl!}
-            download
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-2xl shadow border border-purple-100">
+      <div className="flex border-b border-purple-200 mb-4">
+        {project.purchaseOptions.map((opt, i) => (
+          <button
+            key={opt.purchaseOptionId}
+            onClick={() => setOptIdx(i)}
+            className={`flex-1 py-2 text-center font-medium ${
+              i === optIdx
+                ? "text-gray-900 border-b-2 border-gray-900"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
           >
-            <Button
-              className="w-full bg-green-600 hover:bg-green-700 text-white"
-              size="lg"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              다운로드
-            </Button>
-          </a>
-        ) : (
-          <Button
-            className="w-full bg-sky-500 hover:bg-sky-600 text-white"
-            size="lg"
-            onClick={handlePurchase}
-          >
-            <ShoppingCart className="w-4 h-4 mr-2" />
-            구매하기
-          </Button>
-        )}
+            {opt.title}
+          </button>
+        ))}
+      </div>
 
-        {error && (
-          <div className="text-red-500 text-sm text-center">{error}</div>
+      <div className="mb-4">
+        <span className="text-3xl font-bold text-blue-600">
+          {selected.price.toLocaleString()}원
+        </span>
+        {selected.content && (
+          <p className="mt-2 text-sm text-gray-700">{selected.content}</p>
         )}
-      </CardContent>
-    </Card>
+      </div>
+      <div className="mt-6 mb-4">
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">전달 방식</h3>
+        <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-2xl">
+          <span className="text-2xl">{delivery.icon}</span>
+          <div>
+            <div className="font-medium text-gray-900">{delivery.name}</div>
+            <div className="text-sm text-gray-600">{delivery.description}</div>
+          </div>
+        </div>
+      </div>
+      {isPurchased && downloadUrl ? (
+        <a href={downloadUrl} download>
+          <button className="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center justify-center space-x-2">
+            <Download className="w-6 h-6" />
+            <span className="font-semibold">다운로드</span>
+          </button>
+        </a>
+      ) : (
+        <button
+          onClick={handlePurchase}
+          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center space-x-2"
+        >
+          <ShoppingCart className="w-6 h-6" />
+          <span className="font-semibold">구매하기</span>
+        </button>
+      )}
+
+      {error && (
+        <p className="mt-2 text-center text-red-500 text-sm">{error}</p>
+      )}
+    </div>
   );
 }
