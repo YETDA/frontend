@@ -29,6 +29,7 @@
     "dayjs": "^1.11.13",
     "devcert": "^1.2.2",
     "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.23.6",
     "event-source-polyfill": "^1.0.31",
     "eventsource-polyfill": "^0.9.6",
     "js-cookie": "^3.0.5",
