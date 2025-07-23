@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export function useUserOrderList() {
+export function useSettlement() {
   const [userOrderList, setUserOrderData] = useState<any>(null);
 
   useEffect(() => {
     const fetchFollow = async () => {
       try {
         const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/project/purchase/me/list`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/settlement/purchase/list`,
           {
             params: {
               page: 0,
