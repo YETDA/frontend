@@ -101,7 +101,7 @@ export default function DonationPreviewPanel({ formData }: Props) {
         <Card>
           <CardContent>
             <div className="text-sm text-gray-600 whitespace-pre-line min-h-[100px]">
-              {formData.description || "상세 설명을 입력하세요..."}
+              {formData.description || "제품 소개을 입력하세요..."}
             </div>
           </CardContent>
         </Card>
