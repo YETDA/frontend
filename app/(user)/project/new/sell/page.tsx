@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import type { ProductFormData } from "@/types/productFormData";
-import { createPurchaseProject } from "@/apis/project";
+import { createPurchaseProject } from "@/apis/purchase";
 import SellProjectEditor from "./components/SellProjectEditor";
 
 export default function SellProjectPage() {

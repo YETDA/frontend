@@ -70,12 +70,9 @@ export default function ProjectList() {
 
   return (
     <div className="space-y-16 px-4">
-      {/* 후원 섹션 */}
       <div className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-[#00A4FF]">
-            후원을 기다리고 있어요!
-          </h3>
+          <h3 className="text-xl font-bold ">후원을 기다리고 있어요!</h3>
           <Link
             href="/projects?type=donation"
             className="text-[#00A4FF] hover:underline flex items-center"
@@ -141,12 +138,9 @@ export default function ProjectList() {
         </div>
       </div>
 
-      {/* 구매 섹션 */}
       <div className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-[#00A4FF]">
-            업무 생산성 극대화!
-          </h3>
+          <h3 className="text-xl font-bold ">업무 생산성 극대화!</h3>
           <Link
             href="/projects?type=sale"
             className="text-[#00A4FF] hover:underline flex items-center"
@@ -157,7 +151,7 @@ export default function ProjectList() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {prSlice.map(p => (
             <div key={p.id} className="flex">
-              <Link href={`/project/sell/${p.id}`} className="flex-1">
+              <Link href={`/project/purchase/${p.id}`} className="flex-1">
                 <CardWrapper>
                   <div className="relative h-96 w-full">
                     <Image
