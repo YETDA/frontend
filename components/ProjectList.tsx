@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
   Gift,
   Tag,
-  Users,
   Heart as HeartIcon,
   ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
 import { popularProjectApi } from "@/apis/popular-project/api";
 
@@ -21,13 +21,9 @@ interface Project {
   sellingAmount?: number;
 }
 
-const PER_PAGE = 4;
-
 export default function ProjectList() {
   const [sponsors, setSponsors] = useState<Project[]>([]);
   const [products, setProducts] = useState<Project[]>([]);
-  const [spPage, setSpPage] = useState(0);
-  const [prPage, setPrPage] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,175 +32,128 @@ export default function ProjectList() {
         const { content } = await popularProjectApi(0, 100);
         setSponsors(content.slice(0, 20));
         setProducts(content.slice(20, 40));
-      } catch (e) {
-        console.error(e);
       } finally {
         setLoading(false);
       }
     }
+
     fetchData();
   }, []);
 
   if (loading) {
-    return <p className="text-center py-20">로딩 중…</p>;
+    return <p className="text-center py-20">로딩 중...</p>;
   }
 
-  const spTotal = Math.ceil(sponsors.length / PER_PAGE);
-  const prTotal = Math.ceil(products.length / PER_PAGE);
-  const spSlice = sponsors.slice(
-    spPage * PER_PAGE,
-    spPage * PER_PAGE + PER_PAGE,
-  );
-  const prSlice = products.slice(
-    prPage * PER_PAGE,
-    prPage * PER_PAGE + PER_PAGE,
-  );
-
-  const CardWrapper: React.FC<{ children: React.ReactNode }> = ({
-    children,
-  }) => (
-    <div className="max-w-sm mx-auto bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col h-full">
-      {children}
+  return (
+    <div className="container mx-auto px-6 py-8 space-y-12">
+      <CarouselSection
+        title="🌱 후원을 기다리고 있어요!"
+        items={sponsors}
+        basePath="/project/donation"
+        viewLink="/projects?type=donation"
+        buttonIcon={<Gift className="w-5 h-5" />}
+        showCount={p => `${p.sponsorsCount ?? 0}명 알림신청 중`}
+      />
+      <CarouselSection
+        title="🛍️ 구매를 기다리고 있어요!"
+        items={products}
+        basePath="/project/purchase"
+        viewLink="/projects?type=sale"
+        buttonIcon={<Tag className="w-5 h-5" />}
+        showCount={p => `${p.sellingAmount?.toLocaleString()}원 +`}
+      />
     </div>
   );
+}
+
+function CarouselSection<T extends Project>(props: {
+  title: string;
+  items: T[];
+  basePath: string;
+  viewLink: string;
+  buttonIcon: React.ReactNode;
+  showCount: (p: T) => string;
+}) {
+  const { title, items, basePath, viewLink, buttonIcon, showCount } = props;
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const scrollBy = (offset: number) => {
+    containerRef.current?.scrollBy({ left: offset, behavior: "smooth" });
+  };
 
   return (
-    <div className="space-y-16 px-4">
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold ">후원을 기다리고 있어요!</h3>
-          <Link
-            href="/projects?type=donation"
-            className="text-[#00A4FF] hover:underline flex items-center"
-          >
-            모두 보기 <ChevronRight className="w-5 h-5 ml-1" />
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {spSlice.map(p => (
-            <div key={p.id} className="flex">
-              <Link href={`/project/donation/${p.id}`} className="flex-1">
-                <CardWrapper>
-                  <div className="relative h-96 w-full">
-                    <Image
-                      src={p.thumbnail || "/images/placeholder.png"}
-                      alt={p.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="p-4 flex flex-col flex-1">
-                    <p className="text-lg font-semibold line-clamp-2 mb-4">
-                      {p.title}
-                    </p>
-                    <div className="flex items-center space-x-2 mb-6">
-                      <div className="flex items-center bg-[#E6F4FF] px-2 py-0.5 rounded-full">
-                        <Users className="w-4 h-4 text-[#00A4FF]" />
-                        <span className="ml-1">{p.sponsorsCount ?? 0}</span>
-                      </div>
-                      <div className="flex items-center bg-[#FFE6F0] px-2 py-0.5 rounded-full">
-                        <HeartIcon className="w-4 h-4 text-[#FF4D7A]" />
-                        <span className="ml-1">{p.projectLikeCount ?? 0}</span>
-                      </div>
-                    </div>
-                    <button className="mt-auto w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-[#E9529B] to-[#E9529B]/80 hover:from-[#E9529B]/80 hover:to-[#E9529B] text-white text-base py-3 rounded-full transition">
-                      <Gift className="w-5 h-5" />
-                      <span>후원하기</span>
-                    </button>
-                  </div>
-                </CardWrapper>
-              </Link>
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-center items-center space-x-4 mt-4">
-          <button
-            onClick={() => setSpPage(p => Math.max(0, p - 1))}
-            disabled={spPage === 0}
-            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-          >
-            &lt;
-          </button>
-          <span>
-            {spPage + 1} / {spTotal}
-          </span>
-          <button
-            onClick={() => setSpPage(p => (p < spTotal - 1 ? p + 1 : p))}
-            disabled={spPage >= spTotal - 1}
-            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-          >
-            &gt;
-          </button>
-        </div>
+    <section>
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-xl font-bold">{title}</h3>
+        <Link
+          href={viewLink}
+          className="inline-flex items-center space-x-1 text-[#00A4FF] hover:underline"
+        >
+          <span>모두 보기</span>
+          <ChevronRight className="w-4 h-4" />
+        </Link>
       </div>
+      <div className="relative">
+        <button
+          onClick={() => scrollBy(-300)}
+          className="absolute left-0 top-1/2 -translate-y-1/2 bg-white rounded-full shadow p-2 z-10"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+        <div
+          ref={containerRef}
+          className="flex space-x-4 overflow-x-auto scrollbar-hide py-2 px-1"
+        >
+          {items.map(item => (
+            <Link key={item.id} href={`${basePath}/${item.id}`}>
+              <div className="flex-shrink-0 w-64 bg-white rounded-lg shadow overflow-hidden relative">
+                <div className="relative w-full pt-[75%]">
+                  <Image
+                    src={item.thumbnail ?? "/images/placeholder.png"}
+                    alt={item.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-3">
+                  <p className="text-sm font-medium line-clamp-2 mb-1">
+                    {item.title}
+                  </p>
 
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold ">업무 생산성 극대화!</h3>
-          <Link
-            href="/projects?type=sale"
-            className="text-[#00A4FF] hover:underline flex items-center"
-          >
-            모두 보기 <ChevronRight className="w-5 h-5 ml-1" />
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {prSlice.map(p => (
-            <div key={p.id} className="flex">
-              <Link href={`/project/purchase/${p.id}`} className="flex-1">
-                <CardWrapper>
-                  <div className="relative h-96 w-full">
-                    <Image
-                      src={p.thumbnail || "/images/placeholder.png"}
-                      alt={p.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="p-4 flex flex-col flex-1">
-                    <p className="text-lg font-semibold line-clamp-2 mb-4">
-                      {p.title}
+                  {viewLink.includes("donation") ? (
+                    <p className="text-sm font-semibold text-[#FF4D7A] mb-2">
+                      {Math.round(((item.sellingAmount ?? 0) / 20) * 100)}% 달성
                     </p>
-                    <div className="flex items-center space-x-2 mb-6">
-                      <div className="flex items-center bg-[#E6F4FF] px-2 py-0.5 rounded-full">
-                        <Users className="w-4 h-4 text-[#00A4FF]" />
-                        <span className="ml-1">{p.sellingAmount ?? 0}</span>
-                      </div>
-                      <div className="flex items-center bg-[#FFE6F0] px-2 py-0.5 rounded-full">
-                        <HeartIcon className="w-4 h-4 text-[#FF4D7A]" />
-                        <span className="ml-1">{p.projectLikeCount ?? 0}</span>
-                      </div>
-                    </div>
-                    <button className="mt-auto w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-[#B068F6] to-[#B068F6]/80 hover:from-[#B068F6]/80 hover:to-[#B068F6] text-white text-base py-3 rounded-full transition">
-                      <Tag className="w-5 h-5" />
-                      <span>구매하기</span>
-                    </button>
+                  ) : (
+                    <p className="text-sm font-semibold text-[#FF4D7A] mb-2">
+                      {item.sellingAmount ?? 0}명 구매
+                    </p>
+                  )}
+                  <div className="text-xs text-gray-500 flex items-center">
+                    {showCount(item)}
+                    <span className="ml-2 px-1 py-0.5 border border-gray-300 rounded">
+                      PICK
+                    </span>
                   </div>
-                </CardWrapper>
-              </Link>
-            </div>
+                </div>
+                <div className="absolute top-2 right-2 text-white">
+                  <HeartIcon className="w-5 h-5" />
+                </div>
+                <button className="absolute bottom-3 right-3 flex items-center space-x-1 bg-gradient-to-r from-[#00A4FF] to-[#00A4FF]/80 text-white text-sm font-medium py-1 px-2 rounded-full">
+                  {buttonIcon}
+                  <span>바로가기</span>
+                </button>
+              </div>
+            </Link>
           ))}
         </div>
-        <div className="flex justify-center items-center space-x-4 mt-4">
-          <button
-            onClick={() => setPrPage(p => Math.max(0, p - 1))}
-            disabled={prPage === 0}
-            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-          >
-            &lt;
-          </button>
-          <span>
-            {prPage + 1} / {prTotal}
-          </span>
-          <button
-            onClick={() => setPrPage(p => (p < prTotal - 1 ? p + 1 : p))}
-            disabled={prPage >= prTotal - 1}
-            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-          >
-            &gt;
-          </button>
-        </div>
+        <button
+          onClick={() => scrollBy(300)}
+          className="absolute right-0 top-1/2 -translate-y-1/2 bg-white rounded-full shadow p-2 z-10"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
       </div>
-    </div>
+    </section>
   );
 }
