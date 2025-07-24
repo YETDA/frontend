@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Heart, Clock, Users, DollarSign, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,6 @@ import { getDonationProjectById } from "@/apis/donation";
 import { DonationProject } from "@/types/project/donation";
 
 export default function ProjectDetail() {
-  const router = useRouter();
   const { searchParams } = new URL(window.location.href);
   const projectId = searchParams.get("projectId")!;
 
@@ -23,7 +21,7 @@ export default function ProjectDetail() {
   useEffect(() => {
     (async () => {
       const dto = await getDonationProjectById(projectId);
-      setProject(dto);
+      setProject(dto as DonationProject);
       setLoading(false);
     })();
   }, [projectId]);
