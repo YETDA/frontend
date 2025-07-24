@@ -1,6 +1,6 @@
 import { Heart, User } from "lucide-react";
 
-export const UserTypeTabs = ({ userType, setUserType }) => (
+export const UserTypeTabs = ({ userType, setUserType }: any) => (
   <div className="bg-white rounded-3xl shadow-lg p-6 mb-8">
     <div className="flex bg-secondary-100 rounded-2xl p-1">
       <button
