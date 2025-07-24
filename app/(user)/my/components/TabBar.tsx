@@ -13,8 +13,11 @@ export function TabBar({
   defaultValue: string;
 }) {
   return (
-    <Tabs defaultValue={defaultValue} className="w-full pt-[40px] pb-[40px]">
-      <TabsList>
+    <Tabs
+      defaultValue={defaultValue}
+      className="bg-white rounded-3xl shadow-lg p-6 mb-8"
+    >
+      <TabsList className="flex space-x-2 overflow-x-auto">
         {tabs.map(({ value }) => (
           <TabsTrigger key={value} value={value}>
             {value}
