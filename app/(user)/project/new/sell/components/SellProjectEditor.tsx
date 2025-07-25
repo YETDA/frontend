@@ -64,7 +64,6 @@ export default function SellProjectEditor({
         요금제와 옵션을 선택한 뒤 실시간 미리보기를 확인하세요
       </p>
 
-      {/* 플랜 선택 UI: 카드 스타일 */}
       <div className="flex justify-center gap-4 mb-8">
         {[
           { key: "BASIC", label: "베이직", fee: "수수료 4%" },

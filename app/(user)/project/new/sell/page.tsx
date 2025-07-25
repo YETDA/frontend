@@ -28,13 +28,36 @@ export default function SellProjectPage() {
     creatorAvatar: "",
   };
 
-  // editor에서 전달받은 formData와 planType으로 API 호출
   const handleSubmit = async (
     formData: ProductFormData,
     planType: "BASIC" | "PRO",
   ) => {
-    // BASIC은 1, PRO는 2ㅁ
     const pricingPlanId = planType === "BASIC" ? 1 : 2;
+
+    const purchaseOptionList = formData.options.map(option => {
+      const base = {
+        title: option.name,
+        content: option.description,
+        price: Number(option.price),
+        optionStatus: "AVAILABLE" as const,
+      };
+
+      if (option.deliveryMethod === "FILE_UPLOAD" && option.file) {
+        return {
+          providingMethod: "DOWNLOAD" as const,
+          ...base,
+          fileIdentifier: option.file.name,
+          originalFileName: option.file.name,
+          fileType: option.file.type,
+          fileSize: option.file.size,
+        };
+      } else {
+        return {
+          providingMethod: "EMAIL" as const,
+          ...base,
+        };
+      }
+    });
 
     const requestDto = {
       projectType: "PURCHASE",
@@ -47,28 +70,21 @@ export default function SellProjectPage() {
         gitAddress: "",
         purchaseCategoryId: 1,
         getAverageDeliveryTime: "즉시 다운로드 및 24시간 이내 이메일 발송",
-        purchaseOptionList: formData.options.map(option => ({
-          providingMethod: "DOWNLOAD",
-          title: option.name,
-          content: option.description,
-          price: Number(option.price),
-          optionStatus: "AVAILABLE",
-          fileIdentifier: option.file?.name ?? "",
-          originalFileName: option.file?.name ?? "",
-          fileType: option.file?.type ?? "application/octet-stream",
-          fileSize: option.file?.size ?? 0,
-          fileUrl: "string",
-        })),
+        purchaseOptionList,
       },
     };
 
     const form = new FormData();
     form.append("requestDto", JSON.stringify(requestDto));
     formData.images.forEach(img => {
-      if (img.file) form.append("contentImage", img.file, img.file.name);
+      if (img.file) {
+        form.append("contentImage", img.file, img.file.name);
+      }
     });
     formData.options.forEach(opt => {
-      if (opt.file) form.append("optionFiles", opt.file, opt.file.name);
+      if (opt.deliveryMethod === "FILE_UPLOAD" && opt.file) {
+        form.append("optionFiles", opt.file, opt.file.name);
+      }
     });
 
     try {
