@@ -50,7 +50,7 @@ export default function ProjectList() {
         title="🌱 후원을 기다리고 있어요!"
         items={sponsors}
         basePath="/project/donation"
-        viewLink="/projects?type=donation"
+        viewLink="/list/donation"
         buttonIcon={<Gift className="w-5 h-5" />}
         showCount={p => `${p.sponsorsCount ?? 0}명 알림신청 중`}
       />
@@ -58,7 +58,7 @@ export default function ProjectList() {
         title="🛍️ 구매를 기다리고 있어요!"
         items={products}
         basePath="/project/purchase"
-        viewLink="/projects?type=sale"
+        viewLink="/list/purchase"
         buttonIcon={<Tag className="w-5 h-5" />}
         showCount={p => `${p.sellingAmount?.toLocaleString()}원 +`}
       />
