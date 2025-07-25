@@ -51,9 +51,11 @@ export default function Header() {
               </button>
             </Link>
 
-            <div className="flex items-center gap-4">
-              <Bell className="w-5 h-5" />
-              <Heart className="w-5 h-5" />
+            <div className="flex items-center gap-6">
+              <Bell className="w-6 h-6" />
+              <Link href="/like" className="flex items-center gap-4">
+                <Heart className="w-6 h-6" />
+              </Link>
             </div>
 
             <Link href="/my" className="flex items-center gap-3">

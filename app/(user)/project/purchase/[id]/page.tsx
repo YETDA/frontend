@@ -9,6 +9,7 @@ import DescriptionCard from "./components/DescriptionCard";
 import ProjectSidebarSell from "./components/ProjectSidebarSell";
 import { Tag, Gift } from "lucide-react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { createLike } from "@/apis/like/LikeApi";
 
 const categories: { id: string; name: string; icon: string }[] = [
   { id: "app-service", name: "앱/서비스", icon: "📱" },
@@ -50,11 +51,23 @@ export default function ProductDetailPage({
 
   const cat = categories.find(c => c.name === project.purchaseCategoryName);
 
+  const handleToggleLike = async () => {
+    if (liked) return;
+
+    try {
+      const success = await createLike({ projectId: parseInt(id) });
+      if (success) {
+        setLiked(true);
+      }
+    } catch (error) {
+      console.error("좋아요 실패:", error);
+    }
+  };
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       <ProductHeader
         liked={liked}
-        onToggleLike={() => setLiked(v => !v)}
+        onToggleLike={handleToggleLike}
         category={
           cat ? { id: cat.id, icon: cat.icon, name: cat.name } : undefined
         }
