@@ -146,7 +146,7 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
               </div>
               <div>
                 <label className="block mb-1 font-medium text-gray-700">
-                  추가 가격
+                  가격
                 </label>
                 <input
                   type="number"
