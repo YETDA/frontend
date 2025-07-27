@@ -45,6 +45,7 @@ interface ProjectForm {
   donationMilestoneList: { title: string; content: string; dueDate: string }[];
   donationRewardList: { title: string; content: string; price: number }[];
 }
+
 const SectionHeader = ({
   icon,
   title,
@@ -59,11 +60,7 @@ const SectionHeader = ({
   </div>
 );
 
-export default function CreateProjectPage({
-  initialData,
-}: {
-  initialData?: unknown; // 타입을 unknown으로 설정
-}) {
+export default function CreateProjectPage() {
   const router = useRouter();
   const [showPreview, setShowPreview] = useState(false);
 
@@ -85,45 +82,10 @@ export default function CreateProjectPage({
     projectType: "DONATION",
   };
 
-  const parsedData = initialData as {
-    donationDetail?: {
-      startDate?: string;
-      endDate?: string;
-      gitAddress?: string;
-      deployAddress?: string;
-      appStoreAddress?: string;
-      mainCategoryId?: number;
-      subCategoryIds?: number[];
-      donationMilestoneList?: {
-        title: string;
-        content: string;
-        dueDate: string;
-      }[];
-      donationRewardList?: { title: string; content: string; price: number }[];
-    };
-  };
-
-  // props로 전달받은 데이터를 초기 상태로 설정
-  const [formData, setFormData] = useState<ProjectForm>({
-    ...defaultFormData,
-    ...parsedData, // 타입 단언 후 사용
-    fundingPeriod: {
-      start: parsedData?.donationDetail?.startDate || "",
-      end: parsedData?.donationDetail?.endDate || "",
-    },
-    gitAddress: parsedData?.donationDetail?.gitAddress || "",
-    deployAddress: parsedData?.donationDetail?.deployAddress || "",
-    appStoreAddress: parsedData?.donationDetail?.appStoreAddress || "",
-    mainCategoryId: parsedData?.donationDetail?.mainCategoryId || 1,
-    subCategoryIds: parsedData?.donationDetail?.subCategoryIds || [1],
-    donationMilestoneList:
-      parsedData?.donationDetail?.donationMilestoneList || [],
-    donationRewardList: parsedData?.donationDetail?.donationRewardList || [],
-  });
+  // 초기 상태를 기본값으로 설정
+  const [formData, setFormData] = useState<ProjectForm>(defaultFormData);
 
   // 초기 데이터와 변환된 데이터 비교
-
-  console.log("Initial Data:", initialData);
   console.log("Form Data:", formData);
 
   const handleInputChange = (field: keyof ProjectForm, value: any) => {
