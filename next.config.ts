@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
       "yetdas3.s3.ap-northeast-2.amazonaws.com",
       "static.toss.im",
       "images.unsplash.com",
+      "img1.kakaocdn.net",
     ],
 
     remotePatterns: [

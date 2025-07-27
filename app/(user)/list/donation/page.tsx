@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { popularProjectApi } from "@/apis/popular-project/api";
+import { popularDonationProjectApi } from "@/apis/popular-project/api";
 
 interface Project {
   id: number;
@@ -19,7 +19,7 @@ export default function DonationListPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { content } = await popularProjectApi(0, 100);
+        const { content } = await popularDonationProjectApi(0, 100);
         setProjects(content.slice(0, 20));
       } finally {
         setLoading(false);

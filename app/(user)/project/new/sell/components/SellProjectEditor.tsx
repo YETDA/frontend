@@ -66,8 +66,8 @@ export default function SellProjectEditor({
 
       <div className="flex justify-center gap-4 mb-8">
         {[
-          { key: "BASIC", label: "베이직", fee: "수수료 4%" },
-          { key: "PRO", label: "프로", fee: "수수료 10%" },
+          { key: "BASIC", label: "베이직", fee: "수수료 3%" },
+          { key: "PRO", label: "프로", fee: "수수료 5%" },
         ].map(plan => (
           <button
             key={plan.key}

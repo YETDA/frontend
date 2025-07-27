@@ -50,3 +50,9 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+export const sangMinApi = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  timeout: 10000,
+  withCredentials: true, // 이걸 켜야 쿠키 기반 인증이 서버로 전달됨
+});
