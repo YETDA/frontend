@@ -62,7 +62,7 @@ const SectionHeader = ({
 export default function CreateProjectPage({
   initialData,
 }: {
-  initialData?: any; // optional로 설정
+  initialData?: unknown; // 타입을 unknown으로 설정
 }) {
   const router = useRouter();
   const [showPreview, setShowPreview] = useState(false);
@@ -85,22 +85,40 @@ export default function CreateProjectPage({
     projectType: "DONATION",
   };
 
+  const parsedData = initialData as {
+    donationDetail?: {
+      startDate?: string;
+      endDate?: string;
+      gitAddress?: string;
+      deployAddress?: string;
+      appStoreAddress?: string;
+      mainCategoryId?: number;
+      subCategoryIds?: number[];
+      donationMilestoneList?: {
+        title: string;
+        content: string;
+        dueDate: string;
+      }[];
+      donationRewardList?: { title: string; content: string; price: number }[];
+    };
+  };
+
   // props로 전달받은 데이터를 초기 상태로 설정
   const [formData, setFormData] = useState<ProjectForm>({
     ...defaultFormData,
-    ...initialData, // initialData가 있으면 덮어씀
+    ...parsedData, // 타입 단언 후 사용
     fundingPeriod: {
-      start: initialData?.donationDetail?.startDate || "",
-      end: initialData?.donationDetail?.endDate || "",
+      start: parsedData?.donationDetail?.startDate || "",
+      end: parsedData?.donationDetail?.endDate || "",
     },
-    gitAddress: initialData?.donationDetail?.gitAddress || "",
-    deployAddress: initialData?.donationDetail?.deployAddress || "",
-    appStoreAddress: initialData?.donationDetail?.appStoreAddress || "",
-    mainCategoryId: initialData?.donationDetail?.mainCategoryId || 1,
-    subCategoryIds: initialData?.donationDetail?.subCategoryIds || [1],
+    gitAddress: parsedData?.donationDetail?.gitAddress || "",
+    deployAddress: parsedData?.donationDetail?.deployAddress || "",
+    appStoreAddress: parsedData?.donationDetail?.appStoreAddress || "",
+    mainCategoryId: parsedData?.donationDetail?.mainCategoryId || 1,
+    subCategoryIds: parsedData?.donationDetail?.subCategoryIds || [1],
     donationMilestoneList:
-      initialData?.donationDetail?.donationMilestoneList || [],
-    donationRewardList: initialData?.donationDetail?.donationRewardList || [],
+      parsedData?.donationDetail?.donationMilestoneList || [],
+    donationRewardList: parsedData?.donationDetail?.donationRewardList || [],
   });
 
   // 초기 데이터와 변환된 데이터 비교
@@ -151,7 +169,7 @@ export default function CreateProjectPage({
       const res = await createDonationProject(form);
       console.log("프로젝트 등록 성공:", res);
       alert("프로젝트가 성공적으로 등록되었습니다!");
-      router.push("/projects");
+      router.push("/");
     } catch (error) {
       console.error("프로젝트 등록 실패:", error);
       alert("프로젝트 등록 중 오류가 발생했습니다. 다시 시도해주세요.");
