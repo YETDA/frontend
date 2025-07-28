@@ -10,7 +10,10 @@ import {
   ChevronRight,
   ChevronLeft,
 } from "lucide-react";
-import { popularProjectApi } from "@/apis/popular-project/api";
+import {
+  popularPurchaseProjectApi,
+  popularDonationProjectApi,
+} from "@/apis/popular-project/api";
 
 interface Project {
   id: number;
@@ -22,22 +25,23 @@ interface Project {
 }
 
 export default function ProjectList() {
-  const [sponsors, setSponsors] = useState<Project[]>([]);
-  const [products, setProducts] = useState<Project[]>([]);
+  const [donations, setDonations] = useState<Project[]>([]);
+  const [purchases, setPurchases] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
+    (async () => {
       try {
-        const { content } = await popularProjectApi(0, 100);
-        setSponsors(content.slice(0, 20));
-        setProducts(content.slice(20, 40));
+        const donationData = await popularDonationProjectApi(0, 20);
+        const purchaseData = await popularPurchaseProjectApi(0, 20);
+        setDonations(donationData.content || donationData);
+        setPurchases(purchaseData.content || purchaseData);
+      } catch (e) {
+        console.error("데이터 로드 실패", e);
       } finally {
         setLoading(false);
       }
-    }
-
-    fetchData();
+    })();
   }, []);
 
   if (loading) {
@@ -48,7 +52,7 @@ export default function ProjectList() {
     <div className="container mx-auto px-6 py-8 space-y-12">
       <CarouselSection
         title="🌱 후원을 기다리고 있어요!"
-        items={sponsors}
+        items={donations}
         basePath="/project/donation"
         viewLink="/list/donation"
         buttonIcon={<Gift className="w-5 h-5" />}
@@ -56,7 +60,7 @@ export default function ProjectList() {
       />
       <CarouselSection
         title="🛍️ 구매를 기다리고 있어요!"
-        items={products}
+        items={purchases}
         basePath="/project/purchase"
         viewLink="/list/purchase"
         buttonIcon={<Tag className="w-5 h-5" />}
@@ -119,16 +123,9 @@ function CarouselSection<T extends Project>(props: {
                   <p className="text-sm font-medium line-clamp-2 mb-1">
                     {item.title}
                   </p>
-
-                  {viewLink.includes("donation") ? (
-                    <p className="text-sm font-semibold text-[#FF4D7A] mb-2">
-                      {Math.round(((item.sellingAmount ?? 0) / 20) * 100)}% 달성
-                    </p>
-                  ) : (
-                    <p className="text-sm font-semibold text-[#FF4D7A] mb-2">
-                      {item.sellingAmount ?? 0}명 구매
-                    </p>
-                  )}
+                  <p className="text-sm font-semibold text-[#FF4D7A] mb-2">
+                    {showCount(item)}
+                  </p>
                   <div className="text-xs text-gray-500 flex items-center">
                     {showCount(item)}
                     <span className="ml-2 px-1 py-0.5 border border-gray-300 rounded">
