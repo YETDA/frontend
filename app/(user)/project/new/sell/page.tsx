@@ -91,7 +91,7 @@ export default function SellProjectPage() {
       const res = await createPurchaseProject(form);
       const projectId = res.data?.data?.projectId;
       alert("등록 완료");
-      router.push(`/project/sell/${projectId}`);
+      router.push(`/project/purchase/${projectId}`);
     } catch (err) {
       console.error("프로젝트 등록 실패:", err);
       alert("프로젝트 등록 중 오류가 발생했습니다.");

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ChangeEvent } from "react";
-import { Plus, X } from "lucide-react";
+import { Plus, X, Upload } from "lucide-react";
 import type { ProductFormData } from "@/types/productFormData";
 
 const MAX_OPTIONS = 3;
@@ -64,18 +64,20 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-200/50 p-6 mb-6">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">옵션 설정</h2>
         <button
           type="button"
           onClick={handleAddOption}
           disabled={formData.options.length >= MAX_OPTIONS}
-          className={`flex items-center px-3 py-1 rounded-lg text-sm transition ${
-            formData.options.length >= MAX_OPTIONS
-              ? "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
-              : "bg-blue-600 text-white hover:bg-blue-700"
-          }`}
+          className={`flex items-center px-3 py-1 rounded-lg text-sm transition 
+            ${
+              formData.options.length >= MAX_OPTIONS
+                ? "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+            }
+          `}
         >
           <Plus className="w-4 h-4 mr-1" />
           옵션 추가
@@ -113,7 +115,7 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
                     onChange={() =>
                       handleChangeDeliveryMethod(index, "FILE_UPLOAD")
                     }
-                    className="text-blue-600"
+                    className="form-radio text-blue-600"
                   />
                   <span>파일 업로드</span>
                 </label>
@@ -124,7 +126,7 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
                     onChange={() =>
                       handleChangeDeliveryMethod(index, "EMAIL_SEND")
                     }
-                    className="text-blue-600"
+                    className="form-radio text-blue-600"
                   />
                   <span>메일 전송</span>
                 </label>
@@ -146,15 +148,20 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
               </div>
               <div>
                 <label className="block mb-1 font-medium text-gray-700">
-                  가격
+                  가격 (원)
                 </label>
-                <input
-                  type="number"
-                  value={option.price}
-                  onChange={e => handleChange(index, "price", e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder="예: 5000"
-                />
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={option.price}
+                    onChange={e => handleChange(index, "price", e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    placeholder="예: 5000"
+                  />
+                  <span className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500">
+                    원
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -162,23 +169,25 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
               <label className="block mb-1 font-medium text-gray-700">
                 설명
               </label>
-              <input
-                type="text"
+              <textarea
                 value={option.description}
                 onChange={e =>
                   handleChange(index, "description", e.target.value)
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                rows={2}
                 placeholder="예: 기본 옵션 설명"
               />
             </div>
 
             {option.deliveryMethod === "FILE_UPLOAD" && (
-              <div>
+              <div className="border-t pt-4">
                 <label className="block mb-1 font-medium text-gray-700">
                   첨부 파일 (선택)
                 </label>
-                <div className="flex items-center gap-4">
+                <label className="flex items-center gap-2 cursor-pointer text-blue-600 hover:text-blue-800">
+                  <Upload className="w-5 h-5" />
+                  <span className="underline">파일 선택</span>
                   <input
                     type="file"
                     accept="application/pdf,image/*"
@@ -186,14 +195,20 @@ export default function OptionListSection({ formData, onUpdate }: Props) {
                       const file = e.target.files?.[0];
                       if (file) handleFileChange(index, file);
                     }}
-                    className="block"
+                    className="sr-only"
                   />
-                  {option.file && (
-                    <span className="text-sm text-gray-600">
+                </label>
+                {option.file && (
+                  <div className="mt-2 flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded">
+                    <span className="text-sm text-gray-700">
                       {option.file.name}
                     </span>
-                  )}
-                </div>
+                    <X
+                      className="w-4 h-4 text-gray-500 cursor-pointer"
+                      onClick={() => handleFileChange(index, undefined as any)}
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>
