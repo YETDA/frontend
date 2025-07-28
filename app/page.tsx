@@ -7,7 +7,7 @@ import ProjectList from "@/components/ProjectList";
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-50">
-      <HeroBanner />w
+      <HeroBanner />
       <ProjectGridWithSidebar />
       <ProjectList />
       {/* <CTASection /> */}
